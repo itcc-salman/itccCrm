@@ -62,6 +62,9 @@ class FormsController  extends Controller
 
     public function digitalSalesForm(Request $request)
     {
+        $customers = Customer::where('is_deleted', 0)->get();
+        $user_role_id = User::find(\Auth::id())->roles->first()->id;
+        $users = User::where('is_deleted', 0)->get();
         if ($request->ajax()) {
             $response = array();
             $response['code'] = 200;
@@ -70,7 +73,7 @@ class FormsController  extends Controller
             $response['html'] =  view('master.documents._partial_list',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5)->render();
             return response()->json($response);
         }
-        return view('forms.digitalsales');
+        return view('forms.digitalsales',compact('customers','user_role_id', 'users'));
     }
 
     public function customerSelect()

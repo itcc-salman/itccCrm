@@ -3,7 +3,6 @@
 @section('styles')
 <link href="{{ asset('assets/plugins/icheck/skins/all.css') }}" rel="stylesheet" />
 
-
 <style type="text/css">
     .signature-pad--body canvas {
         border: 2px solid #eee;

@@ -16,6 +16,12 @@ if( !function_exists('get_status_label') ) {
     }
 }
 
+if( !function_exists('get_gst_percentage') ) {
+    function get_gst_percentage() {
+        return 10;
+    }
+}
+
 if( !function_exists('get_status_fields') ) {
     function get_status_fields() {
         return [
