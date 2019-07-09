@@ -15,6 +15,8 @@ class CreateWebSalesFormsTable extends Migration
     {
         Schema::create('web_sales_forms', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedBigInteger('customer_id');
+            $table->unsignedBigInteger('sales_person_id');
             $table->string('client_name')->nullable();
             $table->string('client_surname')->nullable();
             $table->string('client_company_name')->nullable();
@@ -34,24 +36,25 @@ class CreateWebSalesFormsTable extends Migration
 
             $table->string('sub_total')->nullable();
             $table->string('gst_total')->nullable();
-            $table->string('gst_percentage')->nullable();
+            $table->string('gst_percentage')->default('10')->nullable();
             $table->string('total_amt')->nullable();
 
-            $table->string('payment_type')->comment('1-upfront,2-invoice,3-30/40/30,4-50/50');
-            $table->string('payment_method')->comment('1-bank cheque,2-cash,3-direct debit,4-credit card,5-via bank');
-            $table->string('authorisation_client_name');
-            $table->string('authorisation_sales_person');
-            $table->string('authorisation_date');
-            $table->string('authorisation_signature');
+            $table->string('payment_type')->comment('1-bank cheque,2-direct debit,3-invoice');
+            $table->string('payment_method')->comment('1-upfront,2-30/40/30,3-50/50');
+            $table->string('authorisation_date')->nullable();
+            $table->string('authorisation_signature')->nullable();
 
-            $table->string('office_use_only_accepted_by');
-            $table->string('office_use_only_project_manager');
+            $table->string('office_use_only_accepted_by')->nullable();
+            $table->string('office_use_only_project_manager')->nullable();
 
             $table->tinyInteger('status')->default('0')->comment('Active - 0, Deactive - 1');
             $table->tinyInteger('is_deleted')->default('0')->comment('0 - Not Deleted, 1 - Deleted');
             $table->integer('created_by');
             $table->integer('modified_by');
             $table->timestamps();
+
+            $table->foreign('customer_id')->references('id')->on('customers');
+            $table->foreign('sales_person_id')->references('id')->on('users');
         });
     }
 

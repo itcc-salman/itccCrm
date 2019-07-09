@@ -44,6 +44,7 @@
     <script src="{{ asset('assets/plugins/monthly/monthly.js') }}" ></script>
     <script src="{{ asset('assets/plugins/toaster/jquery.toast.min.js') }}" ></script>
     <script src="{{ asset('assets/plugins/sweetalert/sweetalert.min.js') }}" ></script>
+    <script src="{{ asset('assets/plugins/select2/select2.min.js') }}" ></script>
     <!-- End Page Lavel Plugins
        =====================================================================-->
     <!-- Start Theme label Script
@@ -104,6 +105,11 @@
         @if(Session::has('notify-error'))
             notify('{{ Session::get('notify-error') }}', 0);
         @endif
+        $(document).ready(function() {
+            $('.sm-select').select2({
+                allowClear: true
+            });
+        });
     </script>
    </body>
 </html>

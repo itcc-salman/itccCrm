@@ -20,7 +20,7 @@
                         <td><strong>Suburb :</strong> {{ $data->suburb }}</td>
                     </tr>
                     <tr>
-                        <td><strong>State :</strong> {{ $data->state }}</td>
+                        <td><strong>State :</strong> {{ get_states($data->state) }}</td>
                         <td><strong>Post Code :</strong> {{ $data->post_code }}</td>
                     </tr>
                     <tr>

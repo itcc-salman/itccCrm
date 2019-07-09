@@ -92,7 +92,12 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="state">State</label>
-                                    <input type="text" id="state" name="state" value="{{ $data->state }}" class="form-control" placeholder="State">
+                                    <select id="state" name="state" class="form-control sm-select">
+                                        <option value="">Select State</option>
+                                        @foreach( get_states() as $k => $v )
+                                        <option value="{{ $k }}" {{ $data->state == $k ? "selected='selected'" : '' }} >{{ $v }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>

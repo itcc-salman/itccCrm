@@ -14,7 +14,9 @@
                <td>{{ $role->name }}</td>
                <td>
                   @can('role-edit')
+                  @if( $role->id != 1 )
                     <button type="button" class="btn btn-add btn-sm edit_role" edit_id="{{ $role->id }}"><i class="fa fa-pencil"></i></button>
+                  @endif
                   @endcan
                   {{-- <button type="button" class="btn btn-danger btn-sm delete_role" delete_id="{{ $role->id }}"><i class="fa fa-trash-o"></i> </button> --}}
                </td>

@@ -10,15 +10,6 @@ if( !function_exists('setflashmsg') ) {
     }
 }
 
-if( !function_exists('get_industry_list') ) {
-    function get_industry_list() {
-        return [
-            'it' => 'IT',
-            'test' => 'Test'
-        ];
-    }
-}
-
 if( !function_exists('get_status_label') ) {
     function get_status_label($s) {
         return ($s == 0 ? 'Active' : 'InActive');
@@ -113,6 +104,36 @@ if( !function_exists('get_web_sales_services') ) {
             '6'   => 'Hosting',
             '7'   => 'Custom Web App',
             '8'   => 'Other'
+        ];
+        if( $ret_type == NULL ) {
+            return $return;
+        } else {
+            return $return[$ret_type];
+        }
+    }
+}
+
+if( !function_exists('get_payment_type') ) {
+    function get_payment_type($ret_type = NULL) {
+        $return = [
+            '1'   => 'Bank Cheque',
+            '2'   => 'Direct Debit',
+            '3'   => 'Invoice'
+        ];
+        if( $ret_type == NULL ) {
+            return $return;
+        } else {
+            return $return[$ret_type];
+        }
+    }
+}
+
+if( !function_exists('get_payment_method') ) {
+    function get_payment_method($ret_type = NULL) {
+        $return = [
+            '1'   => 'Upfront',
+            '2'   => '30/40/30',
+            '3'   => '50/50'
         ];
         if( $ret_type == NULL ) {
             return $return;

@@ -66,4 +66,5 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'namespace' => 'Adm
     Route::match(['GET','POST'],'directdebitform', 'FormsController@directDebitForm')->name('directdebitform');
     Route::match(['GET','POST'],'websalesform', 'FormsController@webSalesForm')->name('websalesform');
     Route::match(['GET','POST'],'digitalsalesform', 'FormsController@digitalSalesForm')->name('digitalsalesform');
+    Route::post('customer_select', 'FormsController@customerSelect')->name('customer_select');
 });

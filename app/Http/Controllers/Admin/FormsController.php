@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use App\MyModels\Document;
 use Illuminate\Validation\Rule;
+use App\MyModels\Customer;
+use App\User;
 
 class FormsController  extends Controller
 {
@@ -44,6 +46,9 @@ class FormsController  extends Controller
 
     public function webSalesForm(Request $request)
     {
+        $customers = Customer::where('is_deleted', 0)->get();
+        $user_role_id = User::find(\Auth::id())->roles->first()->id;
+        $users = User::where('is_deleted', 0)->get();
         if ($request->ajax()) {
             $response = array();
             $response['code'] = 200;
@@ -52,7 +57,7 @@ class FormsController  extends Controller
             $response['html'] =  view('master.documents._partial_list',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5)->render();
             return response()->json($response);
         }
-        return view('forms.websales');
+        return view('forms.websales',compact('customers','user_role_id', 'users'));
     }
 
     public function digitalSalesForm(Request $request)
@@ -66,6 +71,25 @@ class FormsController  extends Controller
             return response()->json($response);
         }
         return view('forms.digitalsales');
+    }
+
+    public function customerSelect()
+    {
+        $customer_id = $_POST['customer_id'];
+        $response = array();
+        $response['code'] = 200;
+        $data = Customer::find($customer_id);
+        if( $data ) {
+            $response['data'] = $data;
+            $response['status'] = true;
+        } else {
+            $response['status'] = false;
+            $response['data'] = [];
+            $response['msg'] = 'No Customer Found';
+        }
+
+        // $data = Customer::find($customer_id);
+        return response()->json($response);
     }
 
 }
