@@ -65,7 +65,9 @@
                                     <select name="sales_person" id="sales_person" class="form-control sm-select">
                                         <option value="">Select Sales Person</option>
                                         @foreach( $users as $u )
+                                        @if( $u->roles[0]->id != 1)
                                         <option value="{{ $u->id }}">{{ $u->name }}</option>
+                                        @endif
                                         @endforeach
                                     </select>
                                     @else
