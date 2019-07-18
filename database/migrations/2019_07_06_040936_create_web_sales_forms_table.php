@@ -42,7 +42,7 @@ class CreateWebSalesFormsTable extends Migration
             $table->string('payment_type')->comment('1-bank cheque,2-direct debit,3-invoice');
             $table->string('payment_method')->comment('1-upfront,2-30/40/30,3-50/50');
             $table->string('authorisation_date')->nullable();
-            $table->string('authorisation_signature')->nullable();
+            $table->text('authorisation_signature')->nullable();
 
             $table->string('office_use_only_accepted_by')->nullable();
             $table->string('office_use_only_project_manager')->nullable();

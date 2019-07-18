@@ -45,6 +45,7 @@
     <script src="{{ asset('assets/plugins/toaster/jquery.toast.min.js') }}" ></script>
     <script src="{{ asset('assets/plugins/sweetalert/sweetalert.min.js') }}" ></script>
     <script src="{{ asset('assets/plugins/select2/select2.min.js') }}" ></script>
+    <script src="{{ asset('assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js') }}" ></script>
     <!-- End Page Lavel Plugins
        =====================================================================-->
     <!-- Start Theme label Script
@@ -108,6 +109,12 @@
         $(document).ready(function() {
             $('.sm-select').select2({
                 allowClear: true
+            });
+            $('.datepicker').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                todayHighlight: true,
+                clearBtn: true
             });
         });
     </script>

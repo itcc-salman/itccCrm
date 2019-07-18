@@ -1,0 +1,74 @@
+<?php
+
+namespace App\MyModels;
+
+use Illuminate\Database\Eloquent\Model;
+
+class WebSalesForm extends Model
+{
+    protected $guarded = [];
+
+    protected $table = 'web_sales_forms';
+
+    public function setProjectStartDateAttribute($v)
+    {
+        $this->attributes['project_start_date'] = set_date_server($v);
+    }
+
+    public function getprojectStartDateAttribute($v)
+    {
+        return get_date_server($v);
+    }
+
+    public function getcreatedAtAttribute($v)
+    {
+        return get_date_server($v);
+    }
+
+    public function getprojectAmountAttribute($v)
+    {
+        return "$".number_format($v, 2);
+    }
+
+    public function getsubTotalAttribute($v)
+    {
+        return "$".number_format($v, 2);
+    }
+
+    public function getgstTotalAttribute($v)
+    {
+        return "$".number_format($v, 2);
+    }
+
+    public function gettotalAmtAttribute($v)
+    {
+        return "$".number_format($v, 2);
+    }
+
+    public function setProjectServicesAttribute($v)
+    {
+        $val = implode(',', $v);
+        $this->attributes['project_services'] = $val;
+    }
+
+    public function getProjectServicesAttribute($v)
+    {
+        $val = explode(',', $v);
+        return $val;
+    }
+
+    public function webSalesItems()
+    {
+        return $this->hasMany('App\MyModels\WebSalesItems','web_sales_id', 'id');
+    }
+
+    public function customer()
+    {
+        return $this->hasOne('App\MyModels\Customer', 'id', 'customer_id');
+    }
+
+    public function salesPerson()
+    {
+        return $this->hasOne('App\User', 'id', 'sales_person_id');
+    }
+}

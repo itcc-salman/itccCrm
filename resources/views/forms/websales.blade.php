@@ -38,7 +38,9 @@
             <div class="card" id="lobicard-custom-control" data-sortable="true">
                 <div class="card-header">
                     <div class="card-title custom_title">
-                        <h4>SERVICE AGREEMENT</h4>
+                        <h4>SERVICE AGREEMENT
+                            <a class="btn btn-add pull-right" href="{{ route('websales') }}"><i class="fa fa-list"></i> Web Sales List </a>
+                        </h4>
                     </div>
                 </div>
                 <div class="card-body">
@@ -169,7 +171,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="project_start_date">Project Start Date</label>
-                                    <input type="text" id="project_start_date" name="project_start_date" class="form-control" placeholder="DD/MM/YYYY">
+                                    <input type="text" id="project_start_date" name="project_start_date" class="form-control datepicker" placeholder="DD/MM/YYYY">
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -274,7 +276,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="authorisation_date">Date</label>
-                                    <input name="authorisation_date" id="authorisation_date" class="form-control" placeholder="DD/MM/YYYY">
+                                    <input name="authorisation_date" id="authorisation_date" class="form-control datepicker" placeholder="DD/MM/YYYY">
                                 </div>
                             </div>
                         </div>
@@ -291,16 +293,26 @@
                                             <div>
                                                 <button type="button" class="button clear" data-action="clear">Clear</button>
                                                 <button type="button" class="button" data-action="undo">Undo</button>
-                                                <button type="button" class="button save" data-action="save-png">Save as PNG</button>
+                                                <button type="button" class="button save" data-action="save-png">Save</button>
+                                                <input type="hidden" name="signature_first" id="signature_first">
                                             </div>
+                                            <img src="" id="signature_first_img">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                    </form>
                 </div>
+                <div class="card-footer">
+                    <div class="custom_title">
+                        <div class="reset-button pull-right">
+                            <button type="reset" class="btn btn-warning"> Reset</button>
+                            <button type="submit" class="btn btn-success"> Save</button>
+                        </div>
+                    </div>
+                </div>
+                </form>
             </div>
         </div>
    </div>
@@ -451,6 +463,7 @@
 
         clearButton.addEventListener("click", function (event) {
             signaturePad.clear();
+            document.getElementById('signature_first').value = '';
         });
 
         undoButton.addEventListener("click", function (event) {
@@ -460,6 +473,7 @@
                 data.pop(); // remove the last dot or line
                 signaturePad.fromData(data);
             }
+            document.getElementById('signature_first').value = '';
         });
 
         savePNGButton.addEventListener("click", function (event) {
@@ -467,7 +481,9 @@
                 alert("Please provide a signature first.");
             } else {
                 var dataURL = signaturePad.toDataURL();
-                download(dataURL, "signature.png");
+                // download(dataURL, "signature.png");
+                document.getElementById('signature_first').value = dataURL;
+                document.getElementById('signature_first_img').src = dataURL;
             }
         });
 
@@ -593,7 +609,8 @@
                     if(response.status == false) {
                         notify(response.msg,0);
                     } else {
-                        notify(response.msg,1);
+                        location.href = '{{ route('websales') }}'
+                        // notify(response.msg,1);
                     }
                 },
                 error: function() {

@@ -43,6 +43,7 @@
       <link href="{{ asset('assets/plugins/toaster/jquery.toast.min.css') }}" rel="stylesheet" />
       <link href="{{ asset('assets/plugins/sweetalert/sweetalert.css') }}" rel="stylesheet" />
       <link href="{{ asset('assets/plugins/select2/select2.min.css') }}" rel="stylesheet" />
+      <link href="{{ asset('assets/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css') }}" rel="stylesheet" />
       <!-- End page Label Plugins
          =====================================================================-->
       <!-- Start Theme Layout Style

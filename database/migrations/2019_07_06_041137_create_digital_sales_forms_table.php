@@ -34,13 +34,13 @@ class CreateDigitalSalesFormsTable extends Migration
             $table->string('project_services')->nullable()->comment('1-SEO,2-googleAdwords,3-Re-Marketing,4-SocialMedia');
 
             $table->string('payment_method')->comment('1-bank cheque,2-cash,3-direct debit,4-credit card,5-via bank');
-            $table->string('authorisation_client_name');
-            $table->string('authorisation_bdm');
-            $table->string('authorisation_date');
-            $table->string('authorisation_signature');
+            $table->string('authorisation_client_name')->nullable();
+            $table->string('authorisation_bdm')->nullable()->comment('it is sales person only');
+            $table->string('authorisation_date')->nullable();
+            $table->text('authorisation_signature')->nullable();
 
-            $table->string('office_use_only_accepted_by');
-            $table->string('office_use_only_project_manager');
+            $table->string('office_use_only_accepted_by')->nullable();
+            $table->string('office_use_only_project_manager')->nullable();
 
             $table->tinyInteger('status')->default('0')->comment('Active - 0, Deactive - 1');
             $table->tinyInteger('is_deleted')->default('0')->comment('0 - Not Deleted, 1 - Deleted');

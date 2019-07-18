@@ -186,16 +186,35 @@
                         <h5 class="bd-t p-t-4 bd-b p-b-4">Payment Details</h5>
 
                         <div class="row p-t-4">
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="payment_details_regular_debit_amt">Regular Debit <small>Amount</small></label>
                                     <input type="text" id="payment_details_regular_debit_amt" name="payment_details_regular_debit_amt" onkeypress="return isNumberOrSpaceKey(event)" class="form-control" placeholder="$">
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="payment_details_commencing_on">Commencing on</label>
                                     <input type="text" id="payment_details_commencing_on" name="payment_details_commencing_on" class="form-control" placeholder="YYYY/MM/DD">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="payment_details_plus_approp">PLUS approp. <small>Admin Fee each debit</small></label>
+                                    <select name="payment_details_plus_approp" id="payment_details_plus_approp" class="form-control">
+                                        <option value="">Select</option>
+                                        @foreach( get_admin_fee() as $k => $v )
+                                        <option value="{{ $k }}">{{ $v }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="payment_details_variation_amt">Variation to First Debit Only <small>(if applicable)</small></label>
+                                    <input type="text" id="payment_details_variation_amt" name="payment_details_variation_amt" class="form-control" onkeypress="return isNumberKey(event)" placeholder="$">
                                 </div>
                             </div>
                         </div>
@@ -350,8 +369,10 @@
                                             <div>
                                                 <button type="button" class="button clear" data-action="clear">Clear</button>
                                                 <button type="button" class="button" data-action="undo">Undo</button>
-                                                <button type="button" class="button save" data-action="save-png">Save as PNG</button>
+                                                <button type="button" class="button save" data-action="save-png">Save</button>
+                                                <input type="hidden" name="signature_first" id="signature_first">
                                             </div>
+                                            <img src="" id="signature_first_img">
                                         </div>
                                     </div>
                                 </div>
@@ -367,8 +388,10 @@
                                             <div>
                                                 <button type="button" class="button clear" data-action="clear">Clear</button>
                                                 <button type="button" class="button" data-action="undo">Undo</button>
-                                                <button type="button" class="button save" data-action="save-png">Save as PNG</button>
+                                                <button type="button" class="button save" data-action="save-png">Save</button>
+                                                <input type="hidden" name="signature_second" id="signature_second">
                                             </div>
+                                            <img src="" id="signature_second_img">
                                         </div>
                                     </div>
                                 </div>
@@ -439,7 +462,7 @@
                 canvas.width = 290;
                 canvas.height = 300;
             } else if ( window.mobileAndTabletcheck() ) {
-                canvas.width = 350;
+                canvas.width = 310;
                 canvas.height = 300;
             } else {
                 canvas.width = canvas.offsetWidth * ratio;
@@ -498,6 +521,7 @@
 
         clearButton.addEventListener("click", function (event) {
             signaturePad.clear();
+            document.getElementById('signature_first').value = '';
         });
 
         undoButton.addEventListener("click", function (event) {
@@ -507,6 +531,7 @@
                 data.pop(); // remove the last dot or line
                 signaturePad.fromData(data);
             }
+            document.getElementById('signature_first').value = '';
         });
 
         savePNGButton.addEventListener("click", function (event) {
@@ -514,7 +539,9 @@
                 alert("Please provide a signature first.");
             } else {
                 var dataURL = signaturePad.toDataURL();
-                download(dataURL, "signature.png");
+                // download(dataURL, "signature.png");
+                document.getElementById('signature_first').value = dataURL;
+                document.getElementById('signature_first_img').src = dataURL;
             }
         });
 
@@ -548,7 +575,7 @@
                 canvas1.width = 290;
                 canvas1.height = 300;
             } else if ( window.mobileAndTabletcheck() ) {
-                canvas1.width = 350;
+                canvas1.width = 310;
                 canvas1.height = 300;
             } else {
                 canvas1.width = canvas1.offsetWidth * ratio;
@@ -612,6 +639,7 @@
 
         clearButton1.addEventListener("click", function (event) {
             signaturePad1.clear();
+            document.getElementById('signature_second').value = '';
         });
 
         undoButton1.addEventListener("click", function (event) {
@@ -621,6 +649,7 @@
                 data.pop(); // remove the last dot or line
                 signaturePad1.fromData(data);
             }
+            document.getElementById('signature_second').value = '';
         });
 
         savePNGButton1.addEventListener("click", function (event) {
@@ -628,7 +657,9 @@
                 alert("Please provide a signature first.");
             } else {
                 var dataURL = signaturePad1.toDataURL();
-                download1(dataURL, "signature1.png");
+                // download1(dataURL, "signature1.png");
+                document.getElementById('signature_second').value = dataURL;
+                document.getElementById('signature_second_img').src = dataURL;
             }
         });
 

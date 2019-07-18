@@ -51,9 +51,9 @@
                 </a>
                 <ul class="treeview-menu">
                    @can('customer-create')
-                   <li class="{{ (request()->is('admin/customercreate')) ? 'active' : '' }}"><a href="{{ route('customercreate') }}">Add Sales</a></li>
+                   <li class="{{ (request()->is('admin/salesweb')) ? 'active' : '' }}"><a href="{{ route('websales') }}">Web Sales</a></li>
                    @endcan
-                   <li class="{{ (request()->is('admin/customers')) ? 'active' : '' }}"><a href="{{ route('customers') }}">List</a></li>
+                   <li class="{{ (request()->is('admin/customers')) ? 'active' : '' }}"><a href="{{ route('customers') }}">Digital Sales</a></li>
                 </ul>
             </li>
             <li class="treeview {{ (request()->is('admin/doc*')) || (request()->is('admin/directdebitform')) || (request()->is('admin/websalesform')) || (request()->is('admin/digitalsalesform')) ? 'active' : '' }}">

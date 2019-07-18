@@ -22,6 +22,26 @@ if( !function_exists('get_gst_percentage') ) {
     }
 }
 
+if( !function_exists('set_date_server') ) {
+    function set_date_server($v) {
+        if( !empty($v) ) {
+            $_td = explode('/', $v);
+            $val = $_td[2]."-".$_td[1]."-".$_td[0];
+            return date('Y-m-d', strtotime($val));
+        }
+        return NULL;
+    }
+}
+
+if( !function_exists('get_date_server') ) {
+    function get_date_server($v) {
+        if( !empty($v) ) {
+            return date('d/m/Y', strtotime($v));
+        }
+        return NULL;
+    }
+}
+
 if( !function_exists('get_status_fields') ) {
     function get_status_fields() {
         return [
@@ -37,6 +57,22 @@ if( !function_exists('get_direct_debit_form_customer_type') ) {
             '0' => 'New Customer',
             '1' => 'Renewal of Existing Customer',
             '2' => 'Change of Details'
+        ];
+        if( $ret_type == NULL ) {
+            return $return;
+        } else {
+            return $return[$ret_type];
+        }
+    }
+}
+
+if( !function_exists('get_admin_fee') ) {
+    function get_admin_fee($ret_type = NULL) {
+        $return = [
+            '1' => 'Weekly (Admin Fee $1.30)',
+            '2' => 'Fortnightly (Admin Fee $1.95)',
+            '3' => 'Monthly (Admin Fee $2.95)',
+            '4' => 'Quarterly (Admin Fee $3.95)'
         ];
         if( $ret_type == NULL ) {
             return $return;
