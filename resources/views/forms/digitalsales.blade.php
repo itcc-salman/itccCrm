@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Web Sales Form')
+@section('title','Digital Sales Form')
 @section('styles')
 <link href="{{ asset('assets/plugins/icheck/skins/all.css') }}" rel="stylesheet" />
 
@@ -38,7 +38,9 @@
             <div class="card" id="lobicard-custom-control" data-sortable="true">
                 <div class="card-header">
                     <div class="card-title custom_title">
-                        <h4>SERVICE AGREEMENT</h4>
+                        <h4>SERVICE AGREEMENT
+                            <a class="btn btn-add pull-right" href="{{ route('digitalsales') }}"><i class="fa fa-list"></i> Digital Sales List </a>
+                        </h4>
                     </div>
                 </div>
                 <div class="card-body">
@@ -166,16 +168,27 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="project_start_date">Project Start Date</label>
-                                    <input type="text" id="project_start_date" name="project_start_date" class="form-control" placeholder="DD/MM/YYYY">
+                                    <input type="text" id="project_start_date" name="project_start_date" class="form-control datepicker" autocomplete="new-password" placeholder="DD/MM/YYYY">
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="project_amount">Total Amount</label>
                                     <input type="text" id="project_amount" name="project_amount" class="form-control" onkeypress="return isNumberOrSpaceKey(event)" placeholder="$">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="project_minimum_agreed_term">Minimum Agreed Term</label>
+                                    <select id="project_minimum_agreed_term" name="project_minimum_agreed_term" class="form-control">
+                                        <option value="">Select</option>
+                                        @foreach( get_minimum_aggrement_terms() as $k => $v )
+                                        <option value="{{ $k }}">{{ $v }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -183,7 +196,7 @@
                         <h5 class="bd-t p-t-4 bd-b p-b-4">Service/Products</h5>
 
                         <div class="row p-t-4" id="project_services_data">
-                            @foreach( get_web_sales_services() as $k => $v )
+                            @foreach( get_digital_sales_services() as $k => $v )
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <input type="checkbox" id="project_services_{{ $k }}" name="project_services[]" value="{{ $k }}">
@@ -274,7 +287,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="authorisation_date">Date</label>
-                                    <input name="authorisation_date" id="authorisation_date" class="form-control" placeholder="DD/MM/YYYY">
+                                    <input name="authorisation_date" id="authorisation_date" class="form-control datepicker" autocomplete="new-password" placeholder="DD/MM/YYYY">
                                 </div>
                             </div>
                         </div>
@@ -291,16 +304,26 @@
                                             <div>
                                                 <button type="button" class="button clear" data-action="clear">Clear</button>
                                                 <button type="button" class="button" data-action="undo">Undo</button>
-                                                <button type="button" class="button save" data-action="save-png">Save as PNG</button>
+                                                <button type="button" class="button save" data-action="save-png">Save</button>
+                                                <input type="hidden" name="signature_first" id="signature_first">
                                             </div>
+                                            <img src="" id="signature_first_img">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                    </form>
                 </div>
+                <div class="card-footer">
+                    <div class="custom_title">
+                        <div class="reset-button pull-right">
+                            <button type="reset" class="btn btn-warning"> Reset</button>
+                            <button type="submit" class="btn btn-success"> Save</button>
+                        </div>
+                    </div>
+                </div>
+                </form>
             </div>
         </div>
    </div>
@@ -451,6 +474,8 @@
 
         clearButton.addEventListener("click", function (event) {
             signaturePad.clear();
+            document.getElementById('signature_first').value = '';
+            document.getElementById('signature_first_img').src = '';
         });
 
         undoButton.addEventListener("click", function (event) {
@@ -460,6 +485,8 @@
                 data.pop(); // remove the last dot or line
                 signaturePad.fromData(data);
             }
+            document.getElementById('signature_first').value = '';
+            document.getElementById('signature_first_img').src = '';
         });
 
         savePNGButton.addEventListener("click", function (event) {
@@ -467,7 +494,9 @@
                 alert("Please provide a signature first.");
             } else {
                 var dataURL = signaturePad.toDataURL();
-                download(dataURL, "signature.png");
+                // download(dataURL, "signature.png");
+                document.getElementById('signature_first').value = dataURL;
+                document.getElementById('signature_first_img').src = dataURL;
             }
         });
 
@@ -593,7 +622,8 @@
                     if(response.status == false) {
                         notify(response.msg,0);
                     } else {
-                        notify(response.msg,1);
+                        location.href = '{{ route('digitalsales') }}'
+                        // notify(response.msg,1);
                     }
                 },
                 error: function() {

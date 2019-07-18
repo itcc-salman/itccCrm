@@ -171,7 +171,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="project_start_date">Project Start Date</label>
-                                    <input type="text" id="project_start_date" name="project_start_date" class="form-control datepicker" placeholder="DD/MM/YYYY">
+                                    <input type="text" id="project_start_date" name="project_start_date" class="form-control datepicker" autocomplete="new-password" placeholder="DD/MM/YYYY">
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -276,7 +276,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="authorisation_date">Date</label>
-                                    <input name="authorisation_date" id="authorisation_date" class="form-control datepicker" placeholder="DD/MM/YYYY">
+                                    <input name="authorisation_date" id="authorisation_date" class="form-control datepicker" autocomplete="new-password" placeholder="DD/MM/YYYY">
                                 </div>
                             </div>
                         </div>
@@ -464,6 +464,7 @@
         clearButton.addEventListener("click", function (event) {
             signaturePad.clear();
             document.getElementById('signature_first').value = '';
+            document.getElementById('signature_first_img').src = '';
         });
 
         undoButton.addEventListener("click", function (event) {
@@ -474,6 +475,7 @@
                 signaturePad.fromData(data);
             }
             document.getElementById('signature_first').value = '';
+            document.getElementById('signature_first_img').src = '';
         });
 
         savePNGButton.addEventListener("click", function (event) {

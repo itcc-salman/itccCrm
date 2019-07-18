@@ -33,6 +33,12 @@ class CreateDigitalSalesFormsTable extends Migration
             $table->string('project_amount')->nullable();
             $table->string('project_services')->nullable()->comment('1-SEO,2-googleAdwords,3-Re-Marketing,4-SocialMedia');
 
+            $table->string('sub_total')->nullable();
+            $table->string('gst_total')->nullable();
+            $table->string('gst_percentage')->default('10')->nullable();
+            $table->string('total_amt')->nullable();
+
+            $table->string('payment_type')->comment('1-bank cheque,2-direct debit,3-invoice');
             $table->string('payment_method')->comment('1-bank cheque,2-cash,3-direct debit,4-credit card,5-via bank');
             $table->string('authorisation_client_name')->nullable();
             $table->string('authorisation_bdm')->nullable()->comment('it is sales person only');

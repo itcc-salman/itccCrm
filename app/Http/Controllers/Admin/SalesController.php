@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use App\MyModels\WebSalesForm;
 use App\MyModels\WebSalesItems;
+use App\MyModels\DigitalSalesForm;
+use App\MyModels\DigitalSalesItems;
 use PDF;
 
 class SalesController  extends Controller
@@ -63,8 +65,42 @@ class SalesController  extends Controller
         //     return $pdf->download('pdfview.pdf');
         // }
 
-
         return view('sales.websalespdfview');
+    }
+
+    public function digitalSales(Request $request)
+    {
+        if ($request->ajax()) {
+            $response = array();
+            $response['code'] = 200;
+
+            $data = DigitalSalesForm::where('is_deleted', 0)->orderBy('id','DESC')->paginate(5);
+            $response['html'] =  view('sales._digital_partial_list',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5)->render();
+            return response()->json($response);
+        }
+        return view('sales.digitalsales');
+    }
+
+    public function digitalSalesPdfView(Request $request,$id)
+    {
+        // dd(public_path('css/pdfstyle.css'));
+        $digitalsales = DigitalSalesForm::with('salesPerson','digitalSalesItems')->find($id);
+        // view()->share('digitalsales',$digitalsales);
+        // $pdf = PDF::loadView('sales.digitalsalespdfview', compact('digitalsales'));
+        // return $pdf->download('digitalsalespdfview.pdf');
+        // return $pdf->stream();
+
+        $pdf = \App::make('dompdf.wrapper');
+        $html =  view('sales.digitalsalespdfview', compact('digitalsales'))->render();
+        // return $html;
+        $pdf->loadHTML($html);
+        return $pdf->stream();
+        // if($request->has('download')){
+
+        //     return $pdf->download('pdfview.pdf');
+        // }
+
+        return view('sales.digitalsalespdfview');
     }
 
 }

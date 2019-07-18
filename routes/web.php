@@ -71,4 +71,6 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'namespace' => 'Adm
     // Sales
     Route::match(['GET','POST'],'salesweb', 'SalesController@webSales')->name('websales');
     Route::match(['GET','POST'],'saleswebpdf/{id?}', 'SalesController@webSalesPdfView')->name('websalespdf');
+    Route::match(['GET','POST'],'salesdigital', 'SalesController@digitalSales')->name('digitalsales');
+    Route::match(['GET','POST'],'salesdigitalpdf/{id?}', 'SalesController@digitalSalesPdfView')->name('digitalsalespdf');
 });

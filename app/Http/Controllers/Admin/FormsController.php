@@ -10,6 +10,8 @@ use App\MyModels\Document;
 use App\MyModels\Customer;
 use App\MyModels\WebSalesForm;
 use App\MyModels\WebSalesItems;
+use App\MyModels\DigitalSalesForm;
+use App\MyModels\DigitalSalesItems;
 use App\User;
 
 class FormsController  extends Controller
@@ -160,13 +162,106 @@ class FormsController  extends Controller
         $customers = Customer::where('is_deleted', 0)->get();
         $user_role_id = User::find(\Auth::id())->roles->first()->id;
         $users = User::where('is_deleted', 0)->get();
-        if ($request->ajax()) {
+        if ( $request->post() ) {
+            $validator = \Validator::make($request->all(), [
+                'customer_select' => 'required',
+                'sales_person' => 'required',
+                'client_name' => 'required',
+                'client_surname' => 'required',
+                'client_contact_work' => 'required|digits:10',
+                'client_email' => 'required|email',
+                'project_amount' => 'required',
+                'payment_type' => 'required',
+                'payment_method' => 'required',
+                'project_services' => 'required',
+                'item_descriptions' => 'required',
+                'signature_first' => 'required',
+                'client_abn' => 'required|digits:11',
+                'project_minimum_agreed_term' => 'required',
+            ],
+            [
+                'customer_select.required' => 'Customer field is required',
+                'sales_person.required' => 'Sales Person is required',
+                'client_name.required' => 'Customer Name is required',
+                'client_surname.required' => 'Customer Surname is required',
+                'client_contact_work.required' => 'Customer Contact (W) is required',
+                'client_contact_work.digits' => 'Customer Contact (W) should be 10 digits',
+                'client_email.required' => 'Customer Email is required',
+                'client_email.email' => 'Please Enter Valid Email',
+                'project_amount.required' => 'Amount is required',
+                'payment_type.required' => 'Payment Type is required',
+                'payment_method.required' => 'Payment Method is required',
+                'signature_first.required' => 'Signature is required',
+                'project_minimum_agreed_term.required' => 'Minimum Agreed Term is required',
+            ]);
+
+            if ($validator->fails())
+            {
+                return response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
+            }
+
+            $digitalsale = new DigitalSalesForm;
+            $digitalsale->customer_id               = $request->customer_select;
+            $digitalsale->sales_person_id           = $request->sales_person;
+            $digitalsale->client_name               = $request->client_name;
+            $digitalsale->client_surname            = $request->client_surname;
+            $digitalsale->client_company_name       = $request->client_company_name;
+            $digitalsale->client_address_line_1     = $request->client_address_line_1;
+            $digitalsale->client_suburb             = $request->client_suburb;
+            $digitalsale->client_state              = $request->client_state;
+            $digitalsale->client_postcode           = $request->client_postcode;
+            $digitalsale->client_abn                = $request->client_abn;
+            $digitalsale->client_contact_work       = $request->client_contact_work;
+            $digitalsale->client_contact_mobile     = $request->client_contact_mobile;
+            $digitalsale->client_email              = $request->client_email;
+            $digitalsale->client_website            = $request->client_website;
+            $digitalsale->setAttribute('ProjectStartDate', $request->project_start_date);
+            $digitalsale->project_amount            = $request->project_amount;
+            $digitalsale->project_minimum_agreed_term = $request->project_minimum_agreed_term;
+            $digitalsale->setAttribute('ProjectServices', $request->project_services);
+            $digitalsale->payment_type              = $request->payment_type;
+            $digitalsale->payment_method            = $request->payment_method;
+            $digitalsale->authorisation_date        = set_date_server($request->authorisation_date);
+            $digitalsale->authorisation_signature   = $request->signature_first;
+            $digitalsale->created_by                = \Auth::user()->id;
+            $digitalsale->modified_by               = \Auth::user()->id;
+            $digitalsale->save();
+
             $response = array();
             $response['code'] = 200;
 
-            $data = Document::where('is_deleted', 0)->orderBy('id','DESC')->paginate(5);
-            $response['html'] =  view('master.documents._partial_list',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5)->render();
-            return response()->json($response);
+            $_sub_total = $_gst_total = 0;
+
+            if( !empty($digitalsale->id) ) {
+                // now add the data to items table
+                for ($i=0; $i < count($request->unit_price); $i++) {
+                    // create new object
+                    $item = new DigitalSalesItems;
+                    $item->digital_sales_id     = $digitalsale->id;
+                    $item->item_descriptions    = $request->item_descriptions[$i];
+                    $item->unit_price           = $request->unit_price[$i];
+                    $item->quantity             = $request->quantity[$i];
+                    $thistotal = $request->unit_price[$i] * $request->quantity[$i];
+                    $_sub_total += $thistotal;
+                    $item->total                = $thistotal;
+                    $item->created_by           = \Auth::user()->id;
+                    $item->modified_by          = \Auth::user()->id;
+                    $item->save();
+                }
+                $digitalsale->sub_total = $_sub_total;
+                $_gst_total = ( $_sub_total * get_gst_percentage() ) / 100;
+                $digitalsale->gst_total = $_gst_total;
+                $digitalsale->total_amt = $_sub_total + $_gst_total;
+                $digitalsale->save();
+
+                $response['status'] = true;
+                $response['msg'] = 'Digital Sales Form created Successfully';
+                setflashmsg('Digital Sales Form created Successfully','1');
+            } else {
+                $response['status'] = false;
+                $response['msg'] = 'Some error occured. Please try again';
+                setflashmsg('Some error occured. Please try again','0');
+            }
         }
         return view('forms.digitalsales',compact('customers','user_role_id', 'users'));
     }

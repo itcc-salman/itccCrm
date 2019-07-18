@@ -184,3 +184,34 @@ if( !function_exists('get_payment_method') ) {
         }
     }
 }
+
+if( !function_exists('get_digital_sales_services') ) {
+    function get_digital_sales_services($ret_type = NULL) {
+        $return = [
+            '1'   => 'SEO',
+            '2'   => 'Google AdWords',
+            '3'   => 'Re-Marketing',
+            '4'   => 'Social Media',
+        ];
+        if( $ret_type == NULL ) {
+            return $return;
+        } else {
+            return $return[$ret_type];
+        }
+    }
+}
+
+if( !function_exists('get_minimum_aggrement_terms') ) {
+    function get_minimum_aggrement_terms($ret_type = NULL) {
+        $return = [
+            '1'   => '6 Months',
+            '2'   => '12 Months',
+            '3'   => 'NA'
+        ];
+        if( $ret_type == NULL ) {
+            return $return;
+        } else {
+            return $return[$ret_type];
+        }
+    }
+}
