@@ -73,4 +73,20 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'namespace' => 'Adm
     Route::match(['GET','POST'],'saleswebpdf/{id?}', 'SalesController@webSalesPdfView')->name('websalespdf');
     Route::match(['GET','POST'],'salesdigital', 'SalesController@digitalSales')->name('digitalsales');
     Route::match(['GET','POST'],'salesdigitalpdf/{id?}', 'SalesController@digitalSalesPdfView')->name('digitalsalespdf');
+
+    // Leads
+    Route::get('leads','LeadController@index')->name('leads');
+    Route::post('viewlead','LeadController@show')->name('viewlead');
+    Route::get('leadcreate','LeadController@leadCreate')->name('leadcreate');
+    Route::post('leadstore','LeadController@leadCreateStore')->name('leadstore');
+    Route::get('leadedit/{id}','LeadController@leadEdit')->name('leadedit');
+    Route::post('leadeditstore','LeadController@leadEditStore')->name('leadeditstore');
+    Route::post('leaddelete', 'LeadController@destroy')->name('leadDelete');
+
+    // Lead Meetings
+    Route::get('meetings','LeadController@meetings')->name('leadMeetings');
+    Route::post('meetingstore','LeadController@meetingStore')->name('meetingstore');
+    Route::post('meetingedit','LeadController@meetingEdit')->name('meetingedit');
+    Route::post('meetingeditstore','LeadController@meetingEditStore')->name('meetingeditstore');
+
 });

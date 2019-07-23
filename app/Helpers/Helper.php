@@ -42,6 +42,15 @@ if( !function_exists('get_date_server') ) {
     }
 }
 
+if( !function_exists('get_date_server_full') ) {
+    function get_date_server_full($v) {
+        if( !empty($v) ) {
+            return date('d/m/Y h:i A', strtotime($v));
+        }
+        return NULL;
+    }
+}
+
 if( !function_exists('get_status_fields') ) {
     function get_status_fields() {
         return [
@@ -58,7 +67,7 @@ if( !function_exists('get_direct_debit_form_customer_type') ) {
             '1' => 'Renewal of Existing Customer',
             '2' => 'Change of Details'
         ];
-        if( $ret_type == NULL ) {
+        if( $ret_type === NULL ) {
             return $return;
         } else {
             return $return[$ret_type];
@@ -209,6 +218,40 @@ if( !function_exists('get_minimum_aggrement_terms') ) {
             '3'   => 'NA'
         ];
         if( $ret_type == NULL ) {
+            return $return;
+        } else {
+            return $return[$ret_type];
+        }
+    }
+}
+
+if( !function_exists('get_lead_status') ) {
+    function get_lead_status($ret_type = NULL) {
+        $return = [
+            '1' => 'Open',
+            '2' => 'Cancelled',
+            '3' => 'Follow Up',
+            '4' => 'Closed',
+            '5' => 'Appointment Confirmed',
+            '6' => 'Not Interested',
+            '7' => 'Sold'
+        ];
+        if( $ret_type == NULL ) {
+            return $return;
+        } else {
+            return $return[$ret_type];
+        }
+    }
+}
+
+if( !function_exists('get_meeting_status') ) {
+    function get_meeting_status($ret_type = NULL) {
+        $return = [
+            '0' => 'Pending',
+            '1' => 'Done',
+            '2' => 'Cancelled'
+        ];
+        if( $ret_type === NULL ) {
             return $return;
         } else {
             return $return[$ret_type];

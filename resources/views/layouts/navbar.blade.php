@@ -41,6 +41,20 @@
                 </ul>
             </li>
             @endcan
+            <li class="treeview {{ (request()->is('admin/lead*')) ? 'active' : '' }}">
+                <a href="#">
+                <i class="fa fa-users"></i><span>Leads</span>
+                <span class="pull-right-container">
+                <i class="fa fa-angle-left float-right"></i>
+                </span>
+                </a>
+                <ul class="treeview-menu">
+                   @can('customer-create')
+                   <li class="{{ (request()->is('admin/leadcreate')) ? 'active' : '' }}"><a href="{{ route('leadcreate') }}">Add Lead</a></li>
+                   @endcan
+                   <li class="{{ (request()->is('admin/leads')) ? 'active' : '' }}"><a href="{{ route('leads') }}">List</a></li>
+                </ul>
+            </li>
             {{-- @can('customer-list') --}}
             <li class="treeview {{ (request()->is('admin/sales*')) ? 'active' : '' }}">
                 <a href="#">
