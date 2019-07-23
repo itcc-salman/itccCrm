@@ -163,7 +163,7 @@ class LeadController  extends Controller
             $response = array();
             $response['code'] = 200;
 
-            $data = Meeting::where('is_deleted', 0)->where('id', $request->id )
+            $data = Meeting::where('is_deleted', 0)->where('lead_id', $request->id )
                         ->orderBy('id','DESC')->with('salesPerson')->get();
             $hide = false;
             $response['html'] =  view('leads._partial_meetings',compact('data','hide'))->render();
