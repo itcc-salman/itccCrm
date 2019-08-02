@@ -62,9 +62,9 @@ class DigitalSalesForm extends Model
         return $this->hasMany('App\MyModels\DigitalSalesItems','digital_sales_id', 'id');
     }
 
-    public function customer()
+    public function lead()
     {
-        return $this->hasOne('App\MyModels\Customer', 'id', 'customer_id');
+        return $this->hasOne('App\MyModels\Lead', 'id', 'lead_id');
     }
 
     public function salesPerson()

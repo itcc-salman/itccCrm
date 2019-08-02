@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\MyModels\Customer;
+use App\MyModels\Industry;
 use App\MyModels\Lead;
 use App\MyModels\Meeting;
 use App\User;
@@ -38,7 +38,7 @@ class LeadController  extends Controller
             $response = array();
             $response['code'] = 200;
 
-            $data = Lead::where('is_deleted', 0)->with('customer')->orderBy('id','DESC')->paginate(5);
+            $data = Lead::where('is_deleted', 0)->with('salesPerson')->orderBy('id','DESC')->paginate(5);
             $response['html'] =  view('leads._partial_leadlist',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5)->render();
             return response()->json($response);
         }
@@ -47,26 +47,49 @@ class LeadController  extends Controller
 
     public function leadCreate()
     {
-        $customers = Customer::where('is_deleted', 0)->orderBy('first_name')->get();
-        return view('leads.create', compact('customers'));
+        $industry = Industry::where('is_deleted', 0)->orderBy('name')->get();
+        $user_role_id = User::find(\Auth::id())->roles->first()->id;
+        $users = User::where('is_deleted', 0)->get();
+        return view('leads.create', compact('industry', 'user_role_id', 'users'));
     }
 
     public function leadCreateStore(Request $request)
     {
         $validator = \Validator::make($request->all(), [
-            'customer_select' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|email|unique:leads,email',
+            'contact_work' => 'required',
             'lead_status' => 'required',
+            'customer_select' => 'required',
         ],[
-            'customer_select.required' => 'Customer is required'
+            'first_name.required' => 'First Name is required',
+            'last_name.required' => 'Last Name is required',
+            'contact_work.required' => 'Contact Work is required',
+            'customer_select.required' => 'Sales Person is required'
         ]);
 
         if ($validator->fails())
         {
-            return response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
+            return response()->json(['status' => false, 'errors' => $validator->getMessageBag()->toArray()]);
         }
 
         $lead = new Lead;
-        $lead->customer_id          = $request->customer_select;
+        $lead->first_name           = $request->first_name;
+        $lead->last_name            = $request->last_name;
+        $lead->email                = $request->email;
+        $lead->company_name         = $request->company_name;
+        $lead->abn                  = $request->abn;
+        $lead->address_line1        = $request->address_line1;
+        $lead->suburb               = $request->suburb;
+        $lead->state                = $request->state;
+        $lead->post_code            = $request->post_code;
+        $lead->contact_work         = $request->contact_work;
+        $lead->contact_mobile       = $request->contact_mobile;
+        $lead->website_url          = $request->website_url;
+        $lead->no_of_employees      = $request->no_of_employees;
+        $lead->industry             = $request->industry;
+        $lead->sales_person_id      = $request->customer_select;
         $lead->lead_status          = $request->lead_status;
         $lead->created_by           = \Auth::user()->id;
         $lead->modified_by          = \Auth::user()->id;
@@ -85,7 +108,7 @@ class LeadController  extends Controller
      */
     public function show(Request $request)
     {
-        $data = Lead::with('customer')->find($request->id);
+        $data = Lead::with('salesPerson')->find($request->id);
         $meetings = Meeting::where('is_deleted', 0)->where('id', $request->id )
                         ->orderBy('id','DESC')->with('salesPerson')->get();
         $meetings_html =  view('leads._partial_meetings',['data' => $meetings,'hide' => true])->render();
@@ -105,10 +128,11 @@ class LeadController  extends Controller
     public function leadEdit(Request $request,$id)
     {
         $data = Lead::where('id',$id)->first();
-        $customers = Customer::where('is_deleted', 0)->orderBy('first_name')->get();
+
+        $industry = Industry::where('is_deleted', 0)->orderBy('name')->get();
         $user_role_id = User::find(\Auth::id())->roles->first()->id;
         $users = User::where('is_deleted', 0)->get();
-        return view('leads.edit', compact('data','customers','user_role_id','users'));
+        return view('leads.edit', compact('data','industry','user_role_id','users'));
     }
 
     /**
@@ -121,19 +145,39 @@ class LeadController  extends Controller
     public function leadEditStore(Request $request)
     {
         $validator = \Validator::make($request->all(), [
-            'customer_select' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'contact_work' => 'required',
             'lead_status' => 'required',
+            'customer_select' => 'required',
         ],[
-            'customer_select.required' => 'Customer is required'
+            'first_name.required' => 'First Name is required',
+            'last_name.required' => 'Last Name is required',
+            'contact_work.required' => 'Contact Work is required',
+            'customer_select.required' => 'Sales Person is required'
         ]);
 
         if ($validator->fails())
         {
-            return response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
+            return response()->json(['status' => false, 'errors' => $validator->getMessageBag()->toArray()]);
         }
 
         $lead = Lead::find($request->id);
-        $lead->customer_id          = $request->customer_select;
+        $lead->first_name           = $request->first_name;
+        $lead->last_name            = $request->last_name;
+        $lead->email                = $request->email;
+        $lead->company_name         = $request->company_name;
+        $lead->abn                  = $request->abn;
+        $lead->address_line1        = $request->address_line1;
+        $lead->suburb               = $request->suburb;
+        $lead->state                = $request->state;
+        $lead->post_code            = $request->post_code;
+        $lead->contact_work         = $request->contact_work;
+        $lead->contact_mobile       = $request->contact_mobile;
+        $lead->website_url          = $request->website_url;
+        $lead->no_of_employees      = $request->no_of_employees;
+        $lead->industry             = $request->industry;
+        $lead->sales_person_id      = $request->customer_select;
         $lead->lead_status          = $request->lead_status;
         $lead->modified_by          = \Auth::user()->id;
         $lead->save();

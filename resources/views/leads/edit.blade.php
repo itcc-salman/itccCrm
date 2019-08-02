@@ -38,15 +38,113 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="customer_select">Select Customer</label>
-                                    <select name="customer_select" id="customer_select" class="form-control sm-select">
-                                        <option value="">Select Customer</option>
-                                        @foreach( $customers as $v )
-                                        <option value="{{ $v->id }}" {{ $v->id == $data->customer_id ? 'selected="selected"' : '' }}>{{ $v->getCustomerFullName() }}</option>
+                                    <label for="fname">First Name</label>
+                                    <input type="text" id="fname" name="first_name" value="{{ $data->first_name }}" class="form-control" placeholder="First Name">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="lname">Last Name</label>
+                                    <input type="text" id="lname" name="last_name" value="{{ $data->last_name }}" class="form-control" placeholder="Last Name">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" id="email" name="email" value="{{ $data->email }}" class="form-control" placeholder="Email">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="company_name">Company Name</label>
+                                    <input type="text" id="company_name" name="company_name" value="{{ $data->company_name }}" class="form-control" placeholder="Company Name">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="contact_work">Contact (Work)</label>
+                                    <input type="text" id="contact_work" name="contact_work" value="{{ $data->contact_work }}" onkeypress="return isNumberOrSpaceKey(event)" class="form-control" placeholder="Contact (Work)">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="contact_mobile">Contact (Mobile)</label>
+                                    <input type="text" id="contact_mobile" name="contact_mobile" value="{{ $data->contact_mobile }}" onkeypress="return isNumberOrSpaceKey(event)" class="form-control" placeholder="Contact (Mobile)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="abn">ABN</label>
+                                    <input type="text" id="abn" name="abn" value="{{ $data->abn }}" class="form-control" placeholder="ABN">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="address_line1">Street Name and Number</label>
+                                    <input type="text" id="address_line1" name="address_line1" value="{{ $data->address_line1 }}" class="form-control" placeholder="Street Name and Number">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="suburb">Suburb</label>
+                                    <input type="text" id="suburb" name="suburb" value="{{ $data->suburb }}" class="form-control" placeholder="Suburb">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="state">State</label>
+                                    <select id="state" name="state" class="form-control sm-select">
+                                        <option value="">Select State</option>
+                                        @foreach( get_states() as $k => $v )
+                                        <option value="{{ $k }}" {{ $k == $data->state ? 'selected="selected"' : '' }}>{{ $v }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="post_code">Post Code</label>
+                                    <input type="text" id="post_code" name="post_code" value="{{ $data->post_code }}" onkeypress="return isNumberKey(event)" class="form-control" placeholder="Post Code">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="website_url">Website Url</label>
+                                    <input type="text" id="website_url" name="website_url" value="{{ $data->website_url }}" class="form-control" placeholder="Website Url">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="no_of_employees">No Of Employees</label>
+                                    <input type="text" id="no_of_employees" name="no_of_employees" value="{{ $data->no_of_employees }}" onkeypress="return isNumberKey(event)" class="form-control" placeholder="No Of Employees">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="industry">Industry</label>
+                                    <select name="industry" id="industry" class="form-control">
+                                        <option value="">Select Industry</option>
+                                        @foreach( $industry as $v )
+                                        <option value="{{ $v->id }}" {{ $k == $data->industry ? 'selected="selected"' : '' }}>{{ $v->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="lead_status">Lead status</label>
@@ -58,6 +156,23 @@
                                     </select>
                                 </div>
                             </div>
+                            @if( $user_role_id == 1 )
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="customer_select">Select Sales Person</label>
+                                    <select name="customer_select" id="customer_select" class="form-control sm-select">
+                                        <option value="">Select Sales Person</option>
+                                        @foreach( $users as $v )
+                                        @if( $v->roles[0]->id != 1)
+                                        <option value="{{ $v->id }}" {{ $v->id == $data->sales_person_id ? 'selected="selected"' : '' }}>{{ $v->name }}</option>
+                                        @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            @else
+                            <input type="hidden" name="customer_select" value="{{ \Auth::id() }}">
+                            @endif
                         </div>
 
                         <div class="reset-button">
@@ -330,9 +445,14 @@
                 type: 'post',
                 data: $('#edit').serialize(),
                 success: function(response) {
+                    $('input').removeClass('invalid').next('.custom_error').remove();
+                    $('select').removeClass('invalid').next('.custom_error').remove();
                     // console.log(response);
                     if(response.status == false) {
-                        notify(response.msg,0);
+                        $.each(response.errors, function(i,e) {
+                            $("[name='"+i+"']").addClass('invalid')
+                            .after('<span class="custom_error text-danger">'+e+'</span>');
+                        });
                     } else {
                         window.location.href =  "{{ route('leads') }}";
                     }

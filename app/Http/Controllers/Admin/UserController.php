@@ -50,18 +50,24 @@ class UserController  extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
+            'commission' => 'nullable|integer|between: 0,100',
             'roles' => 'required'
         ]);
 
         if ($validator->fails())
         {
-            return response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
+            return response()->json(['status' => false, 'errors' => $validator->getMessageBag()->toArray()]);
         }
 
-        $input = $request->all();
-        $input['password'] = Hash::make($input['password']);
-
-        $user = User::create($input);
+        $user = new User;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->commission = $request->commission;
+        $user->password = Hash::make($request->password);
+        $user->created_by = \Auth::user()->id;
+        $user->modified_by = \Auth::user()->id;
+        $user->save();
         $user->assignRole($request->input('roles'));
         return response()->json(['status' => true, 'msg' => 'User created successfully']);
     }
@@ -112,12 +118,13 @@ class UserController  extends Controller
     {
         $validator = \Validator::make($request->all(), [
             'name' => 'required',
+            'commission' => 'nullable|integer|between: 0,100',
             'roles' => 'required'
         ]);
 
         if ($validator->fails())
         {
-            return response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
+            return response()->json(['status' => false, 'errors' => $validator->getMessageBag()->toArray()]);
         }
 
         /* if(!empty($input['password'])){
@@ -129,6 +136,9 @@ class UserController  extends Controller
 
         $user = User::find($request->user_id);
         $user->name = $request->name;
+        $user->phone = $request->phone;
+        $user->commission = $request->commission;
+        $user->modified_by = \Auth::user()->id;
         $user->save();
         DB::table('model_has_roles')->where('model_id',$request->user_id)->delete();
 

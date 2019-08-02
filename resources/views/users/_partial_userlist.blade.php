@@ -3,8 +3,10 @@
         <thead class="back_table_color">
             <tr class="info">
                <th>No</th>
-               <th>Name</th>
+               <th>FullName</th>
                <th>Email</th>
+               <th>Phone</th>
+               <th>Commission %</th>
                <th>Roles</th>
                <th>Action</th>
             </tr>
@@ -14,8 +16,9 @@
             <tr>
                <td>{{ ++$i }}</td>
                <td>{{ $user->name }}</td>
-               <td>{{ $user->email }}</span>
-               </td>
+               <td>{{ $user->email }}</td>
+               <td>{{ $user->phone == '' ? '-' : $user->phone }}</td>
+               <td>{{ $user->commission == '' ? '-' : $user->commission }}</td>
                <td>
                 @if(!empty($user->getRoleNames()))
                     @foreach($user->getRoleNames() as $v)

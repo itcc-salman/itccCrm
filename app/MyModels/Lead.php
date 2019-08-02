@@ -11,9 +11,19 @@ class Lead extends Model
         return get_date_server_full($v);
     }
 
-    public function customer()
+    public function getCustomerFullName()
     {
-        return $this->hasOne('App\MyModels\Customer', 'id', 'customer_id');
+        return $this->attributes['first_name'].' '.$this->attributes['last_name'];
+    }
+
+    public function salesPerson()
+    {
+        return $this->hasOne('App\User', 'id', 'sales_person_id');
+    }
+
+    public function get_industry()
+    {
+        return $this->hasOne('App\MyModels\Industry','id','industry');
     }
 
     public function meetings()

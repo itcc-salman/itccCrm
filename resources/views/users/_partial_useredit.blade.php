@@ -4,13 +4,21 @@
         <div class="row">
            <!-- Text input-->
            <div class="col-md-12 form-group">
-              <label class="control-label" for="create_name">Name</label>
-              <input type="text" name="name" id="edit_name" placeholder="Name" value="{{ $user->name }}" class="form-control">
+              <label class="control-label" for="create_name">FullName</label>
+              <input type="text" name="name" id="edit_name" placeholder="FullName" value="{{ $user->name }}" class="form-control">
            </div>
            <!-- Text input-->
            <div class="col-md-12 form-group">
               <label class="control-label">Email</label>
               <input type="email" id="edit_email" readonly autocomplete="new-password" value="{{ $user->email }}" placeholder="Email" class="form-control">
+           </div>
+           <div class="col-md-12 form-group">
+                <label class="control-label" for="phone">Phone</label>
+                <input type="text" name="phone" id="phone" autocomplete="new-password" value="{{ $user->phone }}" placeholder="Phone" onkeypress="return isNumberOrSpaceKey(event)" class="form-control">
+           </div>
+           <div class="col-md-12 form-group">
+                <label class="control-label" for="commission">Commission %</label>
+                <input type="text" name="commission" id="commission" autocomplete="new-password" value="{{ $user->commission }}" placeholder="Commission" onkeypress="return isNumberKey(event)" class="form-control">
            </div>
            {{-- <div class="col-md-12 form-group">
               <label class="control-label">Password</label>

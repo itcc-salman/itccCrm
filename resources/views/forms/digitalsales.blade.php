@@ -49,10 +49,10 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="customer_select">Select Customer</label>
-                                    <select name="customer_select" id="customer_select" class="form-control sm-select">
-                                        <option value="">Select Customer</option>
-                                        @foreach( $customers as $v )
+                                    <label for="lead">Select Lead</label>
+                                    <select name="lead" id="lead" class="form-control sm-select">
+                                        <option value="">Select Lead</option>
+                                        @foreach( $leads as $v )
                                         <option value="{{ $v->id }}">{{ $v->getCustomerFullName() }}</option>
                                         @endforeach
                                     </select>
@@ -60,7 +60,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="customer_select">Sales Person</label>
+                                    <label for="sales_person">Sales Person</label>
                                     @if($user_role_id == 1)
                                     <select name="sales_person" id="sales_person" class="form-control sm-select">
                                         <option value="">Select Sales Person</option>
@@ -502,9 +502,9 @@
             }
         });
 
-        $(document).on('change', '#customer_select', function(e) {
+        $(document).on('change', '#lead', function(e) {
             e.preventDefault();
-            var _cust_id = $(this).val();
+            var _lead_id = $(this).val();
             $('#client_name').val('');
             $('#client_surname').val('');
             $('#client_company_name').val('');
@@ -517,7 +517,8 @@
             $('#client_abn').val('');
             $('#client_email').val('');
             $('#client_website').val('');
-            if( _cust_id != '') {
+            $('#sales_person').val('').trigger('change');
+            if( _lead_id != '') {
                 // call ajax here
                 $.ajaxSetup({
                     headers: {
@@ -525,9 +526,9 @@
                     }
                 });
                 $.ajax({
-                    url: '{!! route('customer_select') !!}',
+                    url: '{!! route('lead_select') !!}',
                     type: 'POST',
-                    data: { customer_id: _cust_id},
+                    data: { lead_id: _lead_id},
                     cache: false,
                     success: function (response) {
                         if(response.status == false) {
@@ -546,10 +547,11 @@
                             $('#client_abn').val(_cust.abn);
                             $('#client_email').val(_cust.email);
                             $('#client_website').val(_cust.website_url);
+                            $('#sales_person').val(_cust.sales_person_id).trigger('change');
                         }
                     },
                     error: function() {
-                        console.log('Some error occurred in customer_select !!!');
+                        console.log('Some error occurred in lead_select !!!');
                     }
                 }); // end ajax here
             }

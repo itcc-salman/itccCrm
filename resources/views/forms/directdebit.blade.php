@@ -55,7 +55,12 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="header_state">State</label>
-                                    <input type="text" id="header_state" name="header_state" class="form-control" placeholder="State">
+                                    <select id="header_state" name="header_state" class="form-control sm-select">
+                                        <option value="">Select State</option>
+                                        @foreach( get_states() as $k => $v )
+                                        <option value="{{ $k }}">{{ $v }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -178,7 +183,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="main_customer_dob">DOB</label>
-                                    <input type="text" id="main_customer_dob" name="main_customer_dob" class="form-control" placeholder="YYYY/MM/DD">
+                                    <input type="text" id="main_customer_dob" name="main_customer_dob" class="form-control datepicker" placeholder="DD/MM/YYYY">
                                 </div>
                             </div>
                         </div>
@@ -195,7 +200,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="payment_details_commencing_on">Commencing on</label>
-                                    <input type="text" id="payment_details_commencing_on" name="payment_details_commencing_on" class="form-control" placeholder="YYYY/MM/DD">
+                                    <input type="text" id="payment_details_commencing_on" name="payment_details_commencing_on" class="form-control datepicker" placeholder="DD/MM/YYYY">
                                 </div>
                             </div>
                         </div>
@@ -339,7 +344,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="debit_credit_card_expiry_date">Expiry Date</label>
-                                    <input type="text" id="debit_credit_card_expiry_date" name="debit_credit_card_expiry_date" class="form-control" placeholder="YYYY/MM">
+                                    <input type="text" id="debit_credit_card_expiry_date" name="debit_credit_card_expiry_date" class="form-control" placeholder="MM/YYYY">
                                 </div>
                             </div>
                         </div>
@@ -398,6 +403,15 @@
                             </div>
                         </div>
 
+                        <div class="card-footer">
+                            <div class="custom_title">
+                                <div class="reset-button pull-right">
+                                    <button type="reset" class="btn btn-warning"> Reset</button>
+                                    <button type="submit" class="btn btn-success"> Save</button>
+                                </div>
+                            </div>
+                        </div>
+
                     </form>
                 </div>
             </div>
@@ -412,6 +426,18 @@
 <script type="text/javascript">
 
     $(document).ready(function() {
+
+        var date = new Date();
+        date.setDate(date.getDate());
+        $("#debit_credit_card_expiry_date").datepicker( {
+            format: "mm/yyyy",
+            startView: "months",
+            minViewMode: "months",
+            startDate: date,
+            autoclose: true,
+            todayHighlight: true,
+            clearBtn: true
+        });
 
         $('#card_type_data input').iCheck({
             radioClass: 'iradio_minimal',
@@ -522,6 +548,7 @@
         clearButton.addEventListener("click", function (event) {
             signaturePad.clear();
             document.getElementById('signature_first').value = '';
+            document.getElementById('signature_first_img').src = '';
         });
 
         undoButton.addEventListener("click", function (event) {
@@ -532,6 +559,7 @@
                 signaturePad.fromData(data);
             }
             document.getElementById('signature_first').value = '';
+            document.getElementById('signature_first_img').src = '';
         });
 
         savePNGButton.addEventListener("click", function (event) {
@@ -640,6 +668,7 @@
         clearButton1.addEventListener("click", function (event) {
             signaturePad1.clear();
             document.getElementById('signature_second').value = '';
+            document.getElementById('signature_second_img').src = '';
         });
 
         undoButton1.addEventListener("click", function (event) {
@@ -650,6 +679,7 @@
                 signaturePad1.fromData(data);
             }
             document.getElementById('signature_second').value = '';
+            document.getElementById('signature_second_img').src = '';
         });
 
         savePNGButton1.addEventListener("click", function (event) {
@@ -682,6 +712,7 @@
                     if(response.status == false) {
                         notify(response.msg,0);
                     } else {
+                        // location.href = '{{ route('directdebit') }}'
                         notify(response.msg,1);
                     }
                 },

@@ -29,11 +29,11 @@
                 <div class="card-body">
                     <!-- Plugin content:powerpoint,txt,pdf,png,word,xl -->
                     @can('role-create')
-                    <div class="btn-group d-flex" role="group">
+                    {{-- <div class="btn-group d-flex" role="group">
                         <div class="buttonexport">
                             <a href="#" class="btn btn-add" data-toggle="modal" data-target="#addrole"><i class="fa fa-plus"></i> Add Role</a>
                         </div>
-                    </div>
+                    </div> --}}
                     @endcan
                     <!-- ./Plugin content:powerpoint,txt,pdf,png,word,xl -->
                     <div id="render_data"></div>

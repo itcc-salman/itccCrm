@@ -15,6 +15,9 @@ class CreateDigitalSalesFormsTable extends Migration
     {
         Schema::create('digital_sales_forms', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedBigInteger('lead_id')->nullable();
+            $table->unsignedBigInteger('sales_person_id');
+
             $table->string('client_name')->nullable();
             $table->string('client_surname')->nullable();
             $table->string('client_company_name')->nullable();
@@ -53,6 +56,9 @@ class CreateDigitalSalesFormsTable extends Migration
             $table->integer('created_by');
             $table->integer('modified_by');
             $table->timestamps();
+
+            $table->foreign('lead_id')->references('id')->on('leads');
+            $table->foreign('sales_person_id')->references('id')->on('users');
         });
     }
 

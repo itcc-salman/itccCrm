@@ -15,7 +15,7 @@ class CreateWebSalesFormsTable extends Migration
     {
         Schema::create('web_sales_forms', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedBigInteger('customer_id');
+            $table->unsignedBigInteger('lead_id')->nullable();
             $table->unsignedBigInteger('sales_person_id');
             $table->string('client_name')->nullable();
             $table->string('client_surname')->nullable();
@@ -53,7 +53,7 @@ class CreateWebSalesFormsTable extends Migration
             $table->integer('modified_by');
             $table->timestamps();
 
-            $table->foreign('customer_id')->references('id')->on('customers');
+            $table->foreign('lead_id')->references('id')->on('leads');
             $table->foreign('sales_person_id')->references('id')->on('users');
         });
     }

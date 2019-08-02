@@ -7,7 +7,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use App\MyModels\Document;
+use App\MyModels\Lead;
 use App\MyModels\Customer;
+use App\MyModels\DirectDebitForm;
 use App\MyModels\WebSalesForm;
 use App\MyModels\WebSalesItems;
 use App\MyModels\DigitalSalesForm;
@@ -37,26 +39,105 @@ class FormsController  extends Controller
      */
     public function directDebitForm(Request $request)
     {
-        if ($request->ajax()) {
+        if ($request->post()) {
+            $validator = \Validator::make($request->all(), [
+                'header_business_name' => 'required',
+                'header_state' => 'required',
+                'main_customer_name' => 'required',
+                'main_customer_surname' => 'required',
+                // 'client_contact_work' => 'required|digits:10',
+                'main_customer_email' => 'required|email',
+                'signature_first' => 'required',
+            ],
+            [
+                'header_business_name.required' => 'Business Name is required',
+                'header_state.required' => 'State is required',
+                'main_customer_name.required' => 'Customer Name is required',
+                'main_customer_surname.required' => 'Customer Surname is required',
+                // 'client_contact_work.required' => 'Customer Contact (W) is required',
+                // 'client_contact_work.digits' => 'Customer Contact (W) should be 10 digits',
+                'main_customer_email.required' => 'Customer Email is required',
+                'main_customer_email.email' => 'Please Enter Valid Email',
+                'signature_first.required' => 'Signature is required',
+            ]);
+
+            if ($validator->fails())
+            {
+                return response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
+            }
+
+            $directdebit = new DirectDebitForm;
+            $directdebit->header_business_name = $request->header_business_name;
+            $directdebit->header_state = $request->header_state;
+            $directdebit->header_ref_no = $request->header_ref_no;
+            $directdebit->header_staff_ref = $request->header_staff_ref;
+            $directdebit->header_customer_req = $request->header_customer_req;
+
+            $directdebit->main_company_name = $request->main_company_name;
+            $directdebit->main_customer_name = $request->main_customer_name;
+            $directdebit->main_customer_surname = $request->main_customer_surname;
+            $directdebit->main_customer_dob = set_date_server($request->main_customer_dob);
+            $directdebit->main_customer_driver_licence_no = $request->main_customer_driver_licence_no;
+            $directdebit->main_customer_address_line_1 = $request->main_customer_address_line_1;
+            $directdebit->main_customer_suburb = $request->main_customer_suburb;
+            $directdebit->main_customer_state = $request->main_customer_state;
+            $directdebit->main_customer_postcode = $request->main_customer_postcode;
+            $directdebit->main_customer_email = $request->main_customer_email;
+            $directdebit->main_customer_contact_home = $request->main_customer_contact_home;
+            $directdebit->main_customer_contact_work = $request->main_customer_contact_work;
+            $directdebit->main_customer_contact_mobile = $request->main_customer_contact_mobile;
+
+            $directdebit->payment_details_regular_debit_amt = $request->payment_details_regular_debit_amt;
+            $directdebit->payment_details_commencing_on = $request->payment_details_commencing_on;
+            // $directdebit->payment_details_until_further_notice = $request->
+            // $directdebit->payment_details_for_payments = $request->
+            // $directdebit->payment_details_contract_value = $request->
+
+            $directdebit->payment_details_plus_approp = $request->payment_details_plus_approp;
+            $directdebit->payment_details_variation_amt = $request->payment_details_variation_amt;
+            $directdebit->payment_details_special_condition = $request->payment_details_special_condition;
+
+            $directdebit->direct_debit_bank_bank_name = $request->direct_debit_bank_bank_name;
+            $directdebit->direct_debit_bank_branch_account = $request->direct_debit_bank_branch_account;
+            $directdebit->direct_debit_bank_bsb_number = $request->direct_debit_bank_bsb_number;
+            $directdebit->direct_debit_bank_account_number = $request->direct_debit_bank_account_number;
+            $directdebit->direct_debit_bank_account_holder_name = $request->direct_debit_bank_account_holder_name;
+            $directdebit->direct_debit_bank_account_holder_surname = $request->direct_debit_bank_account_holder_surname;
+            $directdebit->direct_debit_bank_verified_by = $request->direct_debit_bank_verified_by;
+
+            $directdebit->debit_credit_card_card_type = $request->debit_credit_card_card_type;
+            $directdebit->debit_credit_card_name = $request->debit_credit_card_name;
+            $directdebit->debit_credit_card_surname = $request->debit_credit_card_surname;
+            $directdebit->debit_credit_card_number = $request->debit_credit_card_number;
+            $directdebit->debit_credit_card_expiry_date = $request->debit_credit_card_expiry_date;
+
+            $directdebit->authorisation_signature_first = $request->signature_first;
+            $directdebit->authorisation_signature_second = $request->signature_second;
+            // $directdebit->authorisation_date = $request->
+
+            $directdebit->created_by                = \Auth::user()->id;
+            $directdebit->modified_by               = \Auth::user()->id;
+            $directdebit->save();
+
             $response = array();
             $response['code'] = 200;
-
-            $data = Document::where('is_deleted', 0)->orderBy('id','DESC')->paginate(5);
-            $response['html'] =  view('master.documents._partial_list',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5)->render();
+            $response['status'] = true;
+            $response['msg'] = 'Direct Debit Form created Successfully';
+            setflashmsg('Direct Debit Form created Successfully','1');
             return response()->json($response);
+
         }
         return view('forms.directdebit');
     }
 
     public function webSalesForm(Request $request)
     {
-        $customers = Customer::where('is_deleted', 0)->get();
+        $leads = Lead::where('is_deleted', 0)->whereIn('lead_status',[1,3,5])->get();
         $user_role_id = User::find(\Auth::id())->roles->first()->id;
         $users = User::where('is_deleted', 0)->get();
         if ( $request->post() ) {
 
             $validator = \Validator::make($request->all(), [
-                'customer_select' => 'required',
                 'sales_person' => 'required',
                 'client_name' => 'required',
                 'client_surname' => 'required',
@@ -71,7 +152,6 @@ class FormsController  extends Controller
                 'client_abn' => 'required|digits:11',
             ],
             [
-                'customer_select.required' => 'Customer field is required',
                 'sales_person.required' => 'Sales Person is required',
                 'client_name.required' => 'Customer Name is required',
                 'client_surname.required' => 'Customer Surname is required',
@@ -91,7 +171,7 @@ class FormsController  extends Controller
             }
 
             $websale = new WebSalesForm;
-            $websale->customer_id               = $request->customer_select;
+            $websale->lead_id                   = $request->lead;
             $websale->sales_person_id           = $request->sales_person;
             $websale->client_name               = $request->client_name;
             $websale->client_surname            = $request->client_surname;
@@ -143,6 +223,13 @@ class FormsController  extends Controller
                 $websale->total_amt = $_sub_total + $_gst_total;
                 $websale->save();
 
+                // update the lead status to sold
+                $_lead = Lead::find($websale->lead_id);
+                if($_lead) {
+                    $_lead->lead_status = 7;
+                    $_lead->save();
+                }
+
                 $response['status'] = true;
                 $response['msg'] = 'Web Sales Form created Successfully';
                 setflashmsg('Web Sales Form created Successfully','1');
@@ -154,17 +241,16 @@ class FormsController  extends Controller
 
             return response()->json($response);
         }
-        return view('forms.websales',compact('customers','user_role_id', 'users'));
+        return view('forms.websales',compact('leads','user_role_id', 'users'));
     }
 
     public function digitalSalesForm(Request $request)
     {
-        $customers = Customer::where('is_deleted', 0)->get();
+        $leads = Lead::where('is_deleted', 0)->whereIn('lead_status',[1,3,5])->get();
         $user_role_id = User::find(\Auth::id())->roles->first()->id;
         $users = User::where('is_deleted', 0)->get();
         if ( $request->post() ) {
             $validator = \Validator::make($request->all(), [
-                'customer_select' => 'required',
                 'sales_person' => 'required',
                 'client_name' => 'required',
                 'client_surname' => 'required',
@@ -180,7 +266,6 @@ class FormsController  extends Controller
                 'project_minimum_agreed_term' => 'required',
             ],
             [
-                'customer_select.required' => 'Customer field is required',
                 'sales_person.required' => 'Sales Person is required',
                 'client_name.required' => 'Customer Name is required',
                 'client_surname.required' => 'Customer Surname is required',
@@ -201,7 +286,7 @@ class FormsController  extends Controller
             }
 
             $digitalsale = new DigitalSalesForm;
-            $digitalsale->customer_id               = $request->customer_select;
+            $digitalsale->lead_id                   = $request->lead;
             $digitalsale->sales_person_id           = $request->sales_person;
             $digitalsale->client_name               = $request->client_name;
             $digitalsale->client_surname            = $request->client_surname;
@@ -254,6 +339,13 @@ class FormsController  extends Controller
                 $digitalsale->total_amt = $_sub_total + $_gst_total;
                 $digitalsale->save();
 
+                // update the lead status to sold
+                $_lead = Lead::find($digitalsale->lead_id);
+                if($_lead) {
+                    $_lead->lead_status = 7;
+                    $_lead->save();
+                }
+
                 $response['status'] = true;
                 $response['msg'] = 'Digital Sales Form created Successfully';
                 setflashmsg('Digital Sales Form created Successfully','1');
@@ -263,7 +355,7 @@ class FormsController  extends Controller
                 setflashmsg('Some error occured. Please try again','0');
             }
         }
-        return view('forms.digitalsales',compact('customers','user_role_id', 'users'));
+        return view('forms.digitalsales',compact('leads','user_role_id', 'users'));
     }
 
     public function customerSelect()
@@ -272,6 +364,25 @@ class FormsController  extends Controller
         $response = array();
         $response['code'] = 200;
         $data = Customer::find($customer_id);
+        if( $data ) {
+            $response['data'] = $data;
+            $response['status'] = true;
+        } else {
+            $response['status'] = false;
+            $response['data'] = [];
+            $response['msg'] = 'No Customer Found';
+        }
+
+        // $data = Customer::find($customer_id);
+        return response()->json($response);
+    }
+
+    public function leadSelect()
+    {
+        $lead_id = $_POST['lead_id'];
+        $response = array();
+        $response['code'] = 200;
+        $data = Lead::find($lead_id);
         if( $data ) {
             $response['data'] = $data;
             $response['status'] = true;

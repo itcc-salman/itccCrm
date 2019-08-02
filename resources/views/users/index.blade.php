@@ -70,24 +70,32 @@
                         <div class="row">
                            <!-- Text input-->
                            <div class="col-md-12 form-group">
-                              <label class="control-label" for="create_name">Name</label>
-                              <input type="text" name="name" id="create_name" placeholder="Name" class="form-control">
+                              <label class="control-label" for="create_name">FullName</label>
+                              <input type="text" name="name" id="create_name" placeholder="FullName" class="form-control">
                            </div>
                            <!-- Text input-->
                            <div class="col-md-12 form-group">
-                              <label class="control-label">Email</label>
+                              <label class="control-label" for="create_email">Email</label>
                               <input type="email" name="email" id="create_email" autocomplete="new-password" placeholder="Email" class="form-control">
                            </div>
                            <div class="col-md-12 form-group">
-                              <label class="control-label">Password</label>
+                              <label class="control-label" for="phone">Phone</label>
+                              <input type="text" name="phone" id="phone" autocomplete="new-password" placeholder="Phone" onkeypress="return isNumberOrSpaceKey(event)" class="form-control">
+                           </div>
+                           <div class="col-md-12 form-group">
+                              <label class="control-label" for="commission">Commission %</label>
+                              <input type="text" name="commission" id="commission" autocomplete="new-password" placeholder="Commission" onkeypress="return isNumberKey(event)" class="form-control">
+                           </div>
+                           <div class="col-md-12 form-group">
+                              <label class="control-label" for="create_password">Password</label>
                               <input type="password" name="password" autocomplete="new-password" id="create_password" placeholder="Password" class="form-control">
                            </div>
                            <div class="col-md-12 form-group">
-                              <label class="control-label">Confirm Password</label>
+                              <label class="control-label" for="create_confirm_password">Confirm Password</label>
                               <input type="password" name="confirm-password" autocomplete="new-password" id="create_confirm_password" placeholder="Confirm Password" class="form-control">
                            </div>
                            <div class="col-md-12 form-group">
-                              <label class="control-label">Role</label>
+                              <label class="control-label" for="create_roles">Role</label>
                               <select name="roles" id="create_roles" class="form-control">
                                  <option value="">Select Role</option>
                                  @foreach($roles as $role)
@@ -124,6 +132,8 @@
       getRenderedView('{!! route('users') !!}');
 
         $('#adduser').on('hidden.bs.modal', function (e) {
+            $('input').removeClass('invalid').next('.custom_error').remove();
+            $('select').removeClass('invalid').next('.custom_error').remove();
             $(this)
             .find("input,textarea,select")
              .val('')
@@ -152,9 +162,15 @@
             type: 'POST',
             data: $('#create_user').serialize(),
             success: function (response) {
+                $('input').removeClass('invalid').next('.custom_error').remove();
+                $('select').removeClass('invalid').next('.custom_error').remove();
                 var current_tab = $(".page-item.active").index() + 1;
                 if(response.status == false) {
-                    notify(response.msg,0);
+                    $.each(response.errors, function(i,e) {
+                        $("[name='"+i+"']").addClass('invalid')
+                        .after('<span class="custom_error text-danger">'+e+'</span>');
+                    });
+                    // notify(response.msg,0);
                 } else {
                     $('#adduser').modal('toggle');
                     notify(response.msg,1);
@@ -215,7 +231,10 @@
             success: function (response) {
                 var current_tab = $(".page-item.active").index() + 1;
                 if(response.status == false) {
-                    notify(response.msg,0);
+                    $.each(response.errors, function(i,e) {
+                        $("[name='"+i+"']").addClass('invalid')
+                        .after('<span class="custom_error text-danger">'+e+'</span>');
+                    });
                 } else {
                     $('#edit_user_modal').modal('toggle');
                     notify(response.msg,1);

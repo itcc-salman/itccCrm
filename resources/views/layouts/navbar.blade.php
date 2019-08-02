@@ -64,6 +64,7 @@
                 </span>
                 </a>
                 <ul class="treeview-menu">
+                   <li class="{{ (request()->is('admin/salesdirectdebit')) ? 'active' : '' }}"><a href="{{ route('directdebit') }}">Direct Debit Sales</a></li>
                    <li class="{{ (request()->is('admin/salesweb')) ? 'active' : '' }}"><a href="{{ route('websales') }}">Web Sales</a></li>
                    <li class="{{ (request()->is('admin/salesdigital')) ? 'active' : '' }}"><a href="{{ route('digitalsales') }}">Digital Sales</a></li>
                 </ul>

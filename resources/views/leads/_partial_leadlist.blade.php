@@ -3,12 +3,13 @@
         <thead class="back_table_color">
             <tr class="info">
                <th>No</th>
-               <th>Name</th>
+               <th>FullName</th>
                <th>Company</th>
                <th>Suburb</th>
                <th>Contact Work</th>
                <th>Email</th>
                <th>Lead Status</th>
+               <th>Sales Person</th>
                <th>Created Date</th>
                <th>Action</th>
             </tr>
@@ -17,12 +18,13 @@
             @foreach ($data as $key => $value)
             <tr>
                <td>{{ ++$i }}</td>
-               <td>{{ $value->customer->getCustomerFullName() }}</td>
-               <td>{{ $value->customer->company_name }}</td>
-               <td>{{ $value->customer->suburb }}</td>
-               <td>{{ $value->customer->contact_work }}</td>
-               <td>{{ $value->customer->email }}</td>
+               <td>{{ $value->first_name.' '.$value->last_name }}</td>
+               <td>{{ $value->company_name }}</td>
+               <td>{{ $value->suburb }}</td>
+               <td>{{ $value->contact_work }}</td>
+               <td>{{ $value->email }}</td>
                <td>{{ get_lead_status($value->lead_status) }}</td>
+               <td>{{ $value->salesPerson->name }}</td>
                <td>{{ $value->created_at }}</td>
                <td>
                   <button type="button" class="btn btn-info btn-sm view_lead" view_id="{{ $value->id }}"><i class="fa fa-eye"></i></button>

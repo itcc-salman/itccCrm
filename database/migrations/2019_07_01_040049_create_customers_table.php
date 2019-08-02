@@ -18,7 +18,7 @@ class CreateCustomersTable extends Migration
             $table->string('first_name',50);
             $table->string('last_name',50);
             $table->string('company_name');
-            $table->string('abn');
+            $table->string('abn')->nullable();
             $table->string('address_line1')->nullable();
             $table->string('address_line2')->nullable();
             $table->string('suburb',100)->nullable();
@@ -30,7 +30,7 @@ class CreateCustomersTable extends Migration
             $table->string('email')->unique();
             $table->tinyInteger('gender')->nullable()->comment('0-female,1-male');
             $table->string('website_url')->nullable();
-            $table->string('no_of_employees')->default('0');
+            $table->string('no_of_employees')->nullable()->default('0');
             $table->string('industry')->nullable();
             $table->tinyInteger('status')->comment('Active - 0, Deactive - 1');
             $table->tinyInteger('is_deleted')->default('0')->comment('0 - Not Deleted, 1 - Deleted');
