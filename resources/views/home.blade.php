@@ -78,6 +78,53 @@
    </div>
 
    <div class="row">
+    @if( !empty($web_sales) )
+      <!-- WebSales chart start -->
+        <div class="col-lg-6 col-md-12 col-sm-12">
+            <div class="card lobicard lobicard-custom-control"  data-sortable="true">
+                <div class="card-header">
+                    <div class="card-title custom_title">
+                        <h4>Web Sales</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="webSales" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+      <!-- WebSales chart end -->
+      @endif
+      @if( !empty($digital_sales) )
+      <!-- DigitalSales chart start -->
+        <div class="col-lg-6 col-md-12 col-sm-12">
+            <div class="card lobicard lobicard-custom-control"  data-sortable="true">
+                <div class="card-header">
+                    <div class="card-title custom_title">
+                        <h4>Digital Sales</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="DigitalSales" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+      <!-- DigitalSales chart end -->
+      @endif
+      {{-- <div class="col-lg-4  col-md-12 col-sm-12 ">
+            <div class="card lobicard lobicard-custom-control"  data-sortable="true">
+                <div class="card-header">
+                    <div class="card-title custom_title">
+                        <h4>Weekly Earnings & Expenses</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                     <canvas id="singelBarChart" height="323"></canvas>
+                  </div>
+            </div>
+        </div> --}}
+   </div>
+
+   <div class="row">
         <div class="col-lg-6 pinpin">
             <div class="card lobicard lobicard-custom-control"  data-sortable="true">
                 <div class="card-header">
@@ -129,53 +176,6 @@
             </div>
         </div>
     </div>
-
-   <div class="row">
-    @if( !empty($web_sales) )
-      <!-- WebSales chart start -->
-        <div class="col-lg-12 col-md-12 col-sm-12">
-            <div class="card lobicard lobicard-custom-control"  data-sortable="true">
-                <div class="card-header">
-                    <div class="card-title custom_title">
-                        <h4>Web Sales</h4>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <canvas id="webSales" height="100"></canvas>
-                </div>
-            </div>
-        </div>
-      <!-- WebSales chart end -->
-      @endif
-      @if( !empty($digital_sales) )
-      <!-- DigitalSales chart start -->
-        <div class="col-lg-12 col-md-12 col-sm-12">
-            <div class="card lobicard lobicard-custom-control"  data-sortable="true">
-                <div class="card-header">
-                    <div class="card-title custom_title">
-                        <h4>Digital Sales</h4>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <canvas id="DigitalSales" height="100"></canvas>
-                </div>
-            </div>
-        </div>
-      <!-- DigitalSales chart end -->
-      @endif
-      {{-- <div class="col-lg-4  col-md-12 col-sm-12 ">
-            <div class="card lobicard lobicard-custom-control"  data-sortable="true">
-                <div class="card-header">
-                    <div class="card-title custom_title">
-                        <h4>Weekly Earnings & Expenses</h4>
-                    </div>
-                </div>
-                <div class="card-body">
-                     <canvas id="singelBarChart" height="323"></canvas>
-                  </div>
-            </div>
-        </div> --}}
-   </div>
    <!-- /.row -->
    {{-- <div class="row">
       <div class="col-lg-8 col-md-12 col-sm-12">
