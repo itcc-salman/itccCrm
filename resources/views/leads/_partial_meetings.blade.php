@@ -29,7 +29,7 @@
                <td>{{ $value->created_at }}</td>
                @if( !$hide )
                <td>
-                  <button type="button" class="btn btn-add btn-sm edit_this" edit_id="{{ $value->id }}"><i class="fa fa-pencil"></i></button>
+                  <button type="button" class="btn btn-add btn-sm edit_this" data-toggle="tooltip" title="@lang('lang.edit')" edit_id="{{ $value->id }}"><i class="fa fa-pencil"></i></button>
                </td>
                @endif
             </tr>

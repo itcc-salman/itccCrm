@@ -21,12 +21,12 @@
                <td>{{ $value->contact_work }}</td>
                <td>{{ $value->contact_mobile }}</td>
                <td>
-                  <button type="button" class="btn btn-info btn-sm view_customer" view_id="{{ $value->id }}"><i class="fa fa-eye"></i></button>
+                  <button type="button" class="btn btn-info btn-sm view_customer" data-toggle="tooltip" title="@lang('lang.view')" view_id="{{ $value->id }}"><i class="fa fa-eye"></i></button>
                   @can('customer-edit')
-                  <a href="{{ route('customeredit',$value->id) }}" class="btn btn-add btn-sm" edit_id="{{ $value->id }}"><i class="fa fa-pencil"></i></a>
+                  <a href="{{ route('customeredit',$value->id) }}" class="btn btn-add btn-sm" data-toggle="tooltip" title="@lang('lang.edit')" edit_id="{{ $value->id }}"><i class="fa fa-pencil"></i></a>
                   @endcan
                   @can('customer-delete')
-                  <button type="button" class="btn btn-danger btn-sm delete_customer" delete_id="{{ $value->id }}"><i class="fa fa-trash-o"></i> </button>
+                  <button type="button" class="btn btn-danger btn-sm delete_customer" data-toggle="tooltip" title="@lang('lang.delete')" delete_id="{{ $value->id }}"><i class="fa fa-trash-o"></i> </button>
                   @endcan
                </td>
             </tr>

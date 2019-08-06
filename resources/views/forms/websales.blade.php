@@ -223,7 +223,7 @@
                                 </div>
                                 <div class="col-md-1">
                                     <div class="form-group">
-                                        <button id="add_items" class="btn btn-primary m-t-25"><i class="fa fa-plus"></i></button>
+                                        <button id="add_items" data-toggle="tooltip" title="@lang('lang.add_more')" class="btn btn-primary m-t-25"><i class="fa fa-plus"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -585,6 +585,7 @@
                     </div>`;
             $('#items_row').append(_d);
             _count++;
+            $(this).blur();
         });
 
         $(document).on('click', '.removeme', function(e) {

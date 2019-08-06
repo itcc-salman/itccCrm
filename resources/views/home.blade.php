@@ -88,7 +88,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <canvas id="webSales" height="100"></canvas>
+                    <canvas id="webSales" height="150"></canvas>
                 </div>
             </div>
         </div>
@@ -104,7 +104,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <canvas id="DigitalSales" height="100"></canvas>
+                    <canvas id="DigitalSales" height="150"></canvas>
                 </div>
             </div>
         </div>
@@ -147,11 +147,12 @@
                         <p>{{ $meetings->body }}
                         @if( $current_user_role_id != 3 )
                         <br>
-                        Customer Name : {{ $meetings->lead->getCustomerFullName() }}
+                        <strong>Customer Name :</strong> {{ $meetings->lead->getCustomerFullName() }}
                         <br>
-                        Sales Person Name : {{ $meetings->salesPerson->name }}
+                        <strong>Sales Person Name :</strong> {{ $meetings->salesPerson->name }}
                         <br>
-                        Lead Status : {{ get_lead_status($meetings->lead->lead_status) }}
+                        <strong>Lead Status :</strong> {{ get_lead_status($meetings->lead->lead_status) }}
+                        <span class="clearfix"></span>
                         @endif
                         </p>
                     </div>

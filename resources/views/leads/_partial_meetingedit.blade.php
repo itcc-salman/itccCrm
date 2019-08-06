@@ -36,7 +36,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="body">Note</label>
-                        <textarea name="body" id="body" value="{{ $data->body }}" class="form-control" placeholder="Note"></textarea>
+                        <textarea name="body" id="body" class="form-control" placeholder="Note">{{ $data->body }}</textarea>
                     </div>
                 </div>
             </div>
@@ -69,7 +69,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="meeting_summary">Summary</label>
-                        <textarea name="meeting_summary" id="meeting_summary" value="{{ $data->meeting_summary }}" class="form-control" placeholder="Summary"></textarea>
+                        <textarea name="meeting_summary" id="meeting_summary" class="form-control" placeholder="Summary">{{ $data->meeting_summary }}</textarea>
                     </div>
                 </div>
             </div>

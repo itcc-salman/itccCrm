@@ -25,7 +25,7 @@
                <td>{{ $value->main_customer_surname }}</td>
                {{-- <td><span class="label-custom label label-default">{{ get_status_label($value->status) }}</span></td> --}}
                <td>
-                    <a href="{{ route('directdebitpdf', $value->id) }}" target="_blank" class="btn btn-add btn-sm"><i class="fa fa-file-pdf-o"></i></a>
+                    <a href="{{ route('directdebitpdf', $value->id) }}" target="_blank" data-toggle="tooltip" title="@lang('lang.view_pdf')" class="btn btn-add btn-sm"><i class="fa fa-file-pdf-o"></i></a>
                   {{-- <button type="button" class="btn btn-add btn-sm edit_this" edit_id="{{ $value->id }}"><i class="fa fa-pencil"></i></button> --}}
                   {{-- <button type="button" class="btn btn-danger btn-sm delete_this" delete_id="{{ $value->id }}"><i class="fa fa-trash-o"></i> </button> --}}
                </td>

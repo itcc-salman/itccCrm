@@ -27,9 +27,9 @@
                <td>{{ $value->salesPerson->name }}</td>
                <td>{{ $value->created_at }}</td>
                <td>
-                    <button type="button" class="btn btn-info btn-sm view_lead" view_id="{{ $value->id }}"><i class="fa fa-eye"></i></button>
+                    <button type="button" class="btn btn-info btn-sm view_lead" data-toggle="tooltip" title="@lang('lang.view')" view_id="{{ $value->id }}"><i class="fa fa-eye"></i></button>
                     @can('lead-edit')
-                    <a href="{{ route('leadedit',$value->id) }}" class="btn btn-add btn-sm" edit_id="{{ $value->id }}"><i class="fa fa-pencil"></i></a>
+                    <a href="{{ route('leadedit',$value->id) }}" class="btn btn-add btn-sm" data-toggle="tooltip" title="@lang('lang.edit')" edit_id="{{ $value->id }}"><i class="fa fa-pencil"></i></a>
                     @endcan
                </td>
             </tr>

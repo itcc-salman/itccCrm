@@ -96,7 +96,7 @@
                    @endcan
                    <li class="{{ (request()->is('admin/docs/1')) ? 'active' : '' }}"><a href="{{ route('docs',1) }}">SEO Packages</a></li>
                    <li class="{{ (request()->is('admin/docs/2')) ? 'active' : '' }}"><a href="{{ route('docs',2) }}">Web Packages</a></li>
-                   <li class="{{ (request()->is('admin/docs/3')) ? 'active' : '' }}"><a href="{{ route('docs',3) }}">Domain and Hosting Packages</a></li>
+                   <li class="{{ (request()->is('admin/docs/3')) ? 'active' : '' }}"><a href="{{ route('docs',3) }}" class="font-11">Domain & Hosting Packages</a></li>
                    <li class="{{ (request()->is('admin/docs/4')) ? 'active' : '' }}"><a href="{{ route('docs',4) }}">Social Media Packages</a></li>
                    <li class="{{ (request()->is('admin/docs/5')) ? 'active' : '' }}"><a href="{{ route('docs',5) }}">Case Studies</a></li>
                 </ul>
