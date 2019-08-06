@@ -27,8 +27,12 @@
                 @endif
                </td>
                <td>
-                  <button type="button" class="btn btn-add btn-sm edit_user" edit_id="{{ $user->id }}"><i class="fa fa-pencil"></i></button>
-                  <button type="button" class="btn btn-danger btn-sm delete_user" delete_id="{{ $user->id }}"><i class="fa fa-trash-o"></i> </button>
+                    @can('user-edit')
+                    <button type="button" class="btn btn-add btn-sm edit_user" edit_id="{{ $user->id }}"><i class="fa fa-pencil"></i></button>
+                    @endcan
+                    @can('user-delete')
+                    <button type="button" class="btn btn-danger btn-sm delete_user" delete_id="{{ $user->id }}"><i class="fa fa-trash-o"></i> </button>
+                    @endcan
                </td>
             </tr>
             @endforeach

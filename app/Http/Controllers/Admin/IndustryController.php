@@ -16,10 +16,10 @@ class IndustryController  extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        // $this->middleware('permission:user-list');
-        // $this->middleware('permission:role-create', ['only' => ['roleCreate']]);
-        // $this->middleware('permission:role-edit', ['only' => ['edit','roleEdit']]);
-        // $this->middleware('permission:role-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:master-industry-list');
+        $this->middleware('permission:master-industry-create', ['only' => ['industryCreate']]);
+        $this->middleware('permission:master-industry-edit', ['only' => ['industryget', 'industryEdit']]);
+        $this->middleware('permission:master-industry-delete', ['only' => ['industryDestroy']]);
     }
 
     /**

@@ -65,6 +65,8 @@ class CreateDirectDebitFormsTable extends Migration
             $table->text('authorisation_signature_second')->nullable();
             $table->date('authorisation_date')->nullable();
 
+            $table->string('commission')->nullable();
+
             $table->tinyInteger('status')->default('0')->comment('Active - 0, Deactive - 1');
             $table->tinyInteger('is_deleted')->default('0')->comment('0 - Not Deleted, 1 - Deleted');
             $table->integer('created_by');

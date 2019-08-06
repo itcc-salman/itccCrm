@@ -11,6 +11,7 @@ use App\MyModels\WebSalesItems;
 use App\MyModels\DigitalSalesForm;
 use App\MyModels\DigitalSalesItems;
 use App\MyModels\DirectDebitForm;
+use App\User;
 use PDF;
 
 class SalesController  extends Controller
@@ -24,9 +25,9 @@ class SalesController  extends Controller
     {
         $this->middleware('auth');
         // $this->middleware('permission:user-list');
-        // $this->middleware('permission:role-create', ['only' => ['roleCreate']]);
-        // $this->middleware('permission:role-edit', ['only' => ['edit','roleEdit']]);
-        // $this->middleware('permission:role-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:sales-direct-debit', ['only' => ['directDebit', 'directDebitPdfView']]);
+        $this->middleware('permission:sales-web', ['only' => ['webSales', 'webSalesPdfView']]);
+        $this->middleware('permission:sales-digital', ['only' => ['digitalSales', 'digitalSalesPdfView']]);
     }
 
     /**
@@ -40,7 +41,12 @@ class SalesController  extends Controller
             $response = array();
             $response['code'] = 200;
 
-            $data = WebSalesForm::where('is_deleted', 0)->orderBy('id','DESC')->paginate(5);
+            $current_user_role_id = User::find(\Auth::id())->roles->first()->id;
+            if( $current_user_role_id == 3 || $current_user_role_id == 4 ) {
+                $data = WebSalesForm::where('is_deleted', 0)->where('sales_person_id', \Auth::id())->orderBy('id','DESC')->paginate(5);
+            } else {
+                $data = WebSalesForm::where('is_deleted', 0)->orderBy('id','DESC')->paginate(5);
+            }
             $response['html'] =  view('sales._web_partial_list',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5)->render();
             return response()->json($response);
         }
@@ -75,7 +81,12 @@ class SalesController  extends Controller
             $response = array();
             $response['code'] = 200;
 
-            $data = DirectDebitForm::where('is_deleted', 0)->orderBy('id','DESC')->paginate(5);
+            $current_user_role_id = User::find(\Auth::id())->roles->first()->id;
+            if( $current_user_role_id == 3 || $current_user_role_id == 4 ) {
+                $data = DirectDebitForm::where('is_deleted', 0)->where('created_by', \Auth::id())->orderBy('id','DESC')->paginate(5);
+            } else {
+                $data = DirectDebitForm::where('is_deleted', 0)->orderBy('id','DESC')->paginate(5);
+            }
             $response['html'] =  view('sales._direct_debit_partial_list',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5)->render();
             return response()->json($response);
         }
@@ -110,7 +121,12 @@ class SalesController  extends Controller
             $response = array();
             $response['code'] = 200;
 
-            $data = DigitalSalesForm::where('is_deleted', 0)->orderBy('id','DESC')->paginate(5);
+            $current_user_role_id = User::find(\Auth::id())->roles->first()->id;
+            if( $current_user_role_id == 3 || $current_user_role_id == 4 ) {
+                $data = DigitalSalesForm::where('is_deleted', 0)->where('sales_person_id', \Auth::id())->orderBy('id','DESC')->paginate(5);
+            } else {
+                $data = DigitalSalesForm::where('is_deleted', 0)->orderBy('id','DESC')->paginate(5);
+            }
             $response['html'] =  view('sales._digital_partial_list',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5)->render();
             return response()->json($response);
         }

@@ -9,14 +9,14 @@
                 </span>
                 </a>
             </li>
-            {{-- @can('user-list') --}}
+            @can('user-list')
             <li class="{{ (request()->is('admin/users*')) ? 'active' : ''}}">
                 <a href="{{ route('users') }}"><i class="fa fa-users"></i><span>Users Management</span>
                 <span class="pull-right-container">
                 </span>
                 </a>
             </li>
-            {{-- @endcan --}}
+            @endcan
             @can('role-list')
             <li class="{{ (request()->is('admin/roles*')) ? 'active' : ''}}">
                 <a href="{{ route('roles') }}"><i class="fa fa-user-circle"></i><span>Role Management</span>
@@ -41,6 +41,7 @@
                 </ul>
             </li>
             @endcan
+            @can('lead-list')
             <li class="treeview {{ (request()->is('admin/lead*')) ? 'active' : '' }}">
                 <a href="#">
                 <i class="fa fa-users"></i><span>Leads</span>
@@ -49,13 +50,14 @@
                 </span>
                 </a>
                 <ul class="treeview-menu">
-                   @can('customer-create')
+                   @can('lead-create')
                    <li class="{{ (request()->is('admin/leadcreate')) ? 'active' : '' }}"><a href="{{ route('leadcreate') }}">Add Lead</a></li>
                    @endcan
                    <li class="{{ (request()->is('admin/leads')) ? 'active' : '' }}"><a href="{{ route('leads') }}">List</a></li>
                 </ul>
             </li>
-            {{-- @can('customer-list') --}}
+            @endcan
+            @can('sales')
             <li class="treeview {{ (request()->is('admin/sales*')) ? 'active' : '' }}">
                 <a href="#">
                 <i class="fa fa-shopping-cart"></i><span>Sales</span>
@@ -64,29 +66,43 @@
                 </span>
                 </a>
                 <ul class="treeview-menu">
-                   <li class="{{ (request()->is('admin/salesdirectdebit')) ? 'active' : '' }}"><a href="{{ route('directdebit') }}">Direct Debit Sales</a></li>
-                   <li class="{{ (request()->is('admin/salesweb')) ? 'active' : '' }}"><a href="{{ route('websales') }}">Web Sales</a></li>
-                   <li class="{{ (request()->is('admin/salesdigital')) ? 'active' : '' }}"><a href="{{ route('digitalsales') }}">Digital Sales</a></li>
+                    @can('sales-direct-debit')
+                    <li class="{{ (request()->is('admin/salesdirectdebit')) ? 'active' : '' }}"><a href="{{ route('directdebit') }}">Direct Debit Sales</a></li>
+                    @endcan
+                    @can('sales-web')
+                    <li class="{{ (request()->is('admin/salesweb')) ? 'active' : '' }}"><a href="{{ route('websales') }}">Web Sales</a></li>
+                    @endcan
+                    @can('sales-digital')
+                    <li class="{{ (request()->is('admin/salesdigital')) ? 'active' : '' }}"><a href="{{ route('digitalsales') }}">Digital Sales</a></li>
+                    @endcan
                 </ul>
             </li>
+            @endcan
+            @can('documents')
             <li class="treeview {{ (request()->is('admin/doc*')) || (request()->is('admin/directdebitform')) || (request()->is('admin/websalesform')) || (request()->is('admin/digitalsalesform')) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-list"></i><span>Documents</span>
                     <span class="pull-right-container"><i class="fa fa-angle-left float-right"></i></span>
                 </a>
                 <ul class="treeview-menu">
-                   {{-- @can('customer-create') --}}
+                   @can('sales-web')
                    <li class="{{ (request()->is('admin/websalesform')) ? 'active' : '' }}"><a href="{{ route('websalesform') }}">Web Sales Form</a></li>
+                   @endcan
+                   @can('sales-digital')
                    <li class="{{ (request()->is('admin/digitalsalesform')) ? 'active' : '' }}"><a href="{{ route('digitalsalesform') }}">Digital Sales Form</a></li>
+                   @endcan
+                   @can('sales-direct-debit')
                    <li class="{{ (request()->is('admin/directdebitform')) ? 'active' : '' }}"><a href="{{ route('directdebitform') }}">Direct Debit Form</a></li>
+                   @endcan
                    <li class="{{ (request()->is('admin/docs/1')) ? 'active' : '' }}"><a href="{{ route('docs',1) }}">SEO Packages</a></li>
                    <li class="{{ (request()->is('admin/docs/2')) ? 'active' : '' }}"><a href="{{ route('docs',2) }}">Web Packages</a></li>
                    <li class="{{ (request()->is('admin/docs/3')) ? 'active' : '' }}"><a href="{{ route('docs',3) }}">Domain and Hosting Packages</a></li>
                    <li class="{{ (request()->is('admin/docs/4')) ? 'active' : '' }}"><a href="{{ route('docs',4) }}">Social Media Packages</a></li>
                    <li class="{{ (request()->is('admin/docs/5')) ? 'active' : '' }}"><a href="{{ route('docs',5) }}">Case Studies</a></li>
-                   {{-- @endcan --}}
                 </ul>
             </li>
+            @endcan
+            @can('master')
             <li class="treeview {{ (request()->is('admin/master*')) ? 'active' : '' }}">
                 <a href="#">
                 <i class="fa fa-list"></i><span>Master</span>
@@ -95,13 +111,15 @@
                 </span>
                 </a>
                 <ul class="treeview-menu">
-                   {{-- @can('customer-create') --}}
+                   @can('master-industry-list')
                    <li class="{{ (request()->is('admin/master/industry*')) ? 'active' : '' }}"><a href="{{ route('masterindustry') }}">Industry</a></li>
+                   @endcan
+                   @can('master-document-list')
                    <li class="{{ (request()->is('admin/master/document*')) ? 'active' : '' }}"><a href="{{ route('masterdocuments') }}">Documents</a></li>
-                   {{-- @endcan --}}
+                   @endcan
                 </ul>
             </li>
-            {{-- @endcan --}}
+            @endcan
             {{-- <li class="treeview">
                 <a href="#">
                 <i class="fa fa-users"></i><span>Customers</span>

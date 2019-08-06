@@ -8,6 +8,7 @@ use App\MyModels\Customer;
 use App\MyModels\Industry;
 use Spatie\Permission\Models\Role;
 use Illuminate\Validation\Rule;
+use App\User;
 
 class CustomerController  extends Controller
 {
@@ -36,7 +37,12 @@ class CustomerController  extends Controller
             $response = array();
             $response['code'] = 200;
 
-            $data = Customer::where('is_deleted', 0)->orderBy('id','DESC')->paginate(5);
+            $current_user_role_id = User::find(\Auth::id())->roles->first()->id;
+            if( $current_user_role_id == 3 || $current_user_role_id == 4 ) {
+                $data = Customer::where('is_deleted', 0)->where('created_by', \Auth::id())->orderBy('id','DESC')->paginate(5);
+            } else {
+                $data = Customer::where('is_deleted', 0)->orderBy('id','DESC')->paginate(5);
+            }
             $response['html'] =  view('customers._partial_customerlist',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5)->render();
             return response()->json($response);
         }

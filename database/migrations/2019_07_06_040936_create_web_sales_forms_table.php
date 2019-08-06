@@ -47,6 +47,8 @@ class CreateWebSalesFormsTable extends Migration
             $table->string('office_use_only_accepted_by')->nullable();
             $table->string('office_use_only_project_manager')->nullable();
 
+            $table->string('commission')->nullable();
+
             $table->tinyInteger('status')->default('0')->comment('Active - 0, Deactive - 1');
             $table->tinyInteger('is_deleted')->default('0')->comment('0 - Not Deleted, 1 - Deleted');
             $table->integer('created_by');

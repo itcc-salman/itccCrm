@@ -17,7 +17,9 @@
                <td>{{ get_document_types($value->document_type) }}</td>
                {{-- <td><span class="label-custom label label-default">{{ get_status_label($value->status) }}</span></td> --}}
                <td>
-                  <button type="button" class="btn btn-add btn-sm edit_this" edit_id="{{ $value->id }}"><i class="fa fa-pencil"></i></button>
+                    @can('master-document-edit')
+                    <button type="button" class="btn btn-add btn-sm edit_this" edit_id="{{ $value->id }}"><i class="fa fa-pencil"></i></button>
+                    @endcan
                   {{-- <button type="button" class="btn btn-danger btn-sm delete_this" delete_id="{{ $value->id }}"><i class="fa fa-trash-o"></i> </button> --}}
                </td>
             </tr>

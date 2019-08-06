@@ -21,9 +21,9 @@ class LeadController  extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        // $this->middleware('permission:customer-list');
-        // $this->middleware('permission:customer-create', ['only' => ['customerCreate','customerCreateStore']]);
-        // $this->middleware('permission:customer-edit', ['only' => ['customerEdit','customerEditStore']]);
+        $this->middleware('permission:lead-list');
+        $this->middleware('permission:lead-create', ['only' => ['leadCreate','leadCreateStore']]);
+        $this->middleware('permission:lead-edit', ['only' => ['leadEdit','leadEditStore']]);
         // $this->middleware('permission:customer-delete', ['only' => ['destroy']]);
     }
 
@@ -38,7 +38,12 @@ class LeadController  extends Controller
             $response = array();
             $response['code'] = 200;
 
-            $data = Lead::where('is_deleted', 0)->with('salesPerson')->orderBy('id','DESC')->paginate(5);
+            $current_user_role_id = User::find(\Auth::id())->roles->first()->id;
+            if( $current_user_role_id == 3 || $current_user_role_id == 4 ) {
+                $data = Lead::where('is_deleted', 0)->where('sales_person_id', \Auth::id())->with('salesPerson')->orderBy('id','DESC')->paginate(5);
+            } else {
+                $data = Lead::where('is_deleted', 0)->with('salesPerson')->orderBy('id','DESC')->paginate(5);
+            }
             $response['html'] =  view('leads._partial_leadlist',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5)->render();
             return response()->json($response);
         }
@@ -49,7 +54,7 @@ class LeadController  extends Controller
     {
         $industry = Industry::where('is_deleted', 0)->orderBy('name')->get();
         $user_role_id = User::find(\Auth::id())->roles->first()->id;
-        $users = User::where('is_deleted', 0)->get();
+        $users = User::getSalesAgents();
         return view('leads.create', compact('industry', 'user_role_id', 'users'));
     }
 
@@ -131,7 +136,7 @@ class LeadController  extends Controller
 
         $industry = Industry::where('is_deleted', 0)->orderBy('name')->get();
         $user_role_id = User::find(\Auth::id())->roles->first()->id;
-        $users = User::where('is_deleted', 0)->get();
+        $users = User::getSalesAgents();
         return view('leads.edit', compact('data','industry','user_role_id','users'));
     }
 
@@ -258,7 +263,7 @@ class LeadController  extends Controller
     {
         $data = Meeting::find($request->id);
         $user_role_id = User::find(\Auth::id())->roles->first()->id;
-        $users = User::where('is_deleted', 0)->get();
+        $users = User::getSalesAgents();
 
         $response = array();
         $response['code'] = 200;

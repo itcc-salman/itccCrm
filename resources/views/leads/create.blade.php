@@ -162,9 +162,7 @@
                                     <select name="customer_select" id="customer_select" class="form-control sm-select">
                                         <option value="">Select Sales Person</option>
                                         @foreach( $users as $v )
-                                        @if( $v->roles[0]->id != 1)
                                         <option value="{{ $v->id }}">{{ $v->name }}</option>
-                                        @endif
                                         @endforeach
                                     </select>
                                 </div>

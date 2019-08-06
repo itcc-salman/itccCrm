@@ -24,11 +24,13 @@
                 </div>
                 <div class="card-body">
                     <!-- Plugin content:powerpoint,txt,pdf,png,word,xl -->
+                    @can('master-industry-create')
                     <div class="btn-group d-flex" role="group">
                         <div class="buttonexport">
                             <a href="#" class="btn btn-add" data-toggle="modal" data-target="#adduser"><i class="fa fa-plus"></i> Add Industry</a>
                         </div>
                     </div>
+                    @endcan
                     <!-- ./Plugin content:powerpoint,txt,pdf,png,word,xl -->
                     <div id="render_data"></div>
                 </div>

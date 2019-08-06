@@ -24,7 +24,7 @@
                 </div>
                 <div class="card-body">
                     <!-- Plugin content:powerpoint,txt,pdf,png,word,xl -->
-                    @can('customer-create')
+                    @can('lead-create')
                     <div class="btn-group d-flex" role="group">
                         <div class="buttonexport">
                             <a href="{{ route('leadcreate') }}" class="btn btn-add"><i class="fa fa-plus"></i> Add Lead</a>

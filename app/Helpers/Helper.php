@@ -258,3 +258,25 @@ if( !function_exists('get_meeting_status') ) {
         }
     }
 }
+
+if( !function_exists('get_chart_colors') ) {
+    function get_chart_colors($ret_type = NULL) {
+        $return = [
+            '0' => 'rgba(0, 150, 136, 0.8)',
+            '1' => 'rgba(51, 51, 51, 0.55)',
+            '2' => 'rgba(247, 159, 129, 0.55)',
+            '3' => 'rgba(129, 159, 247, 0.55)',
+            '4' => 'rgba(245, 169, 208, 0.60)',
+            '5' => 'rgba(169, 226, 243, 0.92)',
+            '6' => 'rgba(208, 245, 169, 0.99)',
+            '7' => 'rgba(224, 86, 253, 0.45)',
+            '8' => 'rgba(255, 121, 121, 0.78)',
+            '9' => 'rgba(186, 220, 88, 0.81)',
+        ];
+        if( $ret_type === NULL ) {
+            return $return;
+        } else {
+            return $return[$ret_type];
+        }
+    }
+}

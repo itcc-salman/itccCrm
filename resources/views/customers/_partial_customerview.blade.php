@@ -33,7 +33,7 @@
                     </tr>
                     <tr>
                         <td><strong>No of Employees :</strong> {{ $data->no_of_employees }}</td>
-                        <td><strong>Industry :</strong> {{ $data->get_industry->name }}</td>
+                        <td><strong>Industry :</strong> {{ $data->industry != NULL ? $data->get_industry->name : '-' }}</td>
                     </tr>
                 </table>
             </div>

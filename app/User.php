@@ -28,4 +28,10 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public static function getSalesAgents()
+    {
+        return User::where('users.is_deleted', 0)->join('model_has_roles as r','r.model_id', '=', 'users.id')
+                    ->whereIn('r.role_id', ['3'])->get();
+    }
 }

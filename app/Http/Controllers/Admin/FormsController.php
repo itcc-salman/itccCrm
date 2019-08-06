@@ -27,9 +27,9 @@ class FormsController  extends Controller
     {
         $this->middleware('auth');
         // $this->middleware('permission:user-list');
-        // $this->middleware('permission:role-create', ['only' => ['roleCreate']]);
-        // $this->middleware('permission:role-edit', ['only' => ['edit','roleEdit']]);
-        // $this->middleware('permission:role-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:sales-direct-debit', ['only' => ['directDebitForm']]);
+        $this->middleware('permission:sales-web', ['only' => ['webSalesForm']]);
+        $this->middleware('permission:sales-digital', ['only' => ['digitalSalesForm']]);
     }
 
     /**
@@ -132,9 +132,13 @@ class FormsController  extends Controller
 
     public function webSalesForm(Request $request)
     {
-        $leads = Lead::where('is_deleted', 0)->whereIn('lead_status',[1,3,5])->get();
         $user_role_id = User::find(\Auth::id())->roles->first()->id;
-        $users = User::where('is_deleted', 0)->get();
+        if( $user_role_id == 3 || $user_role_id == 4 ) {
+            $leads = Lead::where('is_deleted', 0)->where('sales_person_id', \Auth::id())->whereIn('lead_status',[1,3,5])->get();
+        } else {
+            $leads = Lead::where('is_deleted', 0)->whereIn('lead_status',[1,3,5])->get();
+        }
+        $users = User::getSalesAgents();
         if ( $request->post() ) {
 
             $validator = \Validator::make($request->all(), [
@@ -228,6 +232,30 @@ class FormsController  extends Controller
                 if($_lead) {
                     $_lead->lead_status = 7;
                     $_lead->save();
+                    // now add customer with this lead data
+                    // check email already exists for customer
+                    $customer = Customer::where('email', $_lead->email)->first();
+                    if( !$customer ) {
+                        $customer = new Customer;
+                        $customer->first_name        = $_lead->first_name;
+                        $customer->last_name         = $_lead->last_name;
+                        $customer->email             = $_lead->email;
+                        $customer->company_name      = $_lead->company_name;
+                        $customer->abn               = $_lead->abn;
+                        $customer->address_line1     = $_lead->address_line1;
+                        $customer->suburb            = $_lead->suburb;
+                        $customer->state             = $_lead->state;
+                        $customer->post_code         = $_lead->post_code;
+                        $customer->contact_work      = $_lead->contact_work;
+                        $customer->contact_mobile    = $_lead->contact_mobile;
+                        $customer->website_url       = $_lead->website_url;
+                        $customer->no_of_employees   = $_lead->no_of_employees;
+                        $customer->industry          = $_lead->industry;
+                        $customer->status            = 0;
+                        $customer->created_by        = $websale->sales_person_id;
+                        $customer->modified_by       = $websale->sales_person_id;
+                        $customer->save();
+                    }
                 }
 
                 $response['status'] = true;
@@ -246,9 +274,13 @@ class FormsController  extends Controller
 
     public function digitalSalesForm(Request $request)
     {
-        $leads = Lead::where('is_deleted', 0)->whereIn('lead_status',[1,3,5])->get();
         $user_role_id = User::find(\Auth::id())->roles->first()->id;
-        $users = User::where('is_deleted', 0)->get();
+        if( $user_role_id == 3 || $user_role_id == 4 ) {
+            $leads = Lead::where('is_deleted', 0)->where('sales_person_id', \Auth::id())->whereIn('lead_status',[1,3,5])->get();
+        } else {
+            $leads = Lead::where('is_deleted', 0)->whereIn('lead_status',[1,3,5])->get();
+        }
+        $users = User::getSalesAgents();
         if ( $request->post() ) {
             $validator = \Validator::make($request->all(), [
                 'sales_person' => 'required',
@@ -344,6 +376,30 @@ class FormsController  extends Controller
                 if($_lead) {
                     $_lead->lead_status = 7;
                     $_lead->save();
+                    // now add customer with this lead data
+                    // check email already exists for customer
+                    $customer = Customer::where('email', $_lead->email)->first();
+                    if( !$customer ) {
+                        $customer = new Customer;
+                        $customer->first_name        = $_lead->first_name;
+                        $customer->last_name         = $_lead->last_name;
+                        $customer->email             = $_lead->email;
+                        $customer->company_name      = $_lead->company_name;
+                        $customer->abn               = $_lead->abn;
+                        $customer->address_line1     = $_lead->address_line1;
+                        $customer->suburb            = $_lead->suburb;
+                        $customer->state             = $_lead->state;
+                        $customer->post_code         = $_lead->post_code;
+                        $customer->contact_work      = $_lead->contact_work;
+                        $customer->contact_mobile    = $_lead->contact_mobile;
+                        $customer->website_url       = $_lead->website_url;
+                        $customer->no_of_employees   = $_lead->no_of_employees;
+                        $customer->industry          = $_lead->industry;
+                        $customer->status            = 0;
+                        $customer->created_by        = $digitalsale->sales_person_id;
+                        $customer->modified_by       = $digitalsale->sales_person_id;
+                        $customer->save();
+                    }
                 }
 
                 $response['status'] = true;

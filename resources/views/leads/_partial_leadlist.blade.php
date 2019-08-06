@@ -27,8 +27,10 @@
                <td>{{ $value->salesPerson->name }}</td>
                <td>{{ $value->created_at }}</td>
                <td>
-                  <button type="button" class="btn btn-info btn-sm view_lead" view_id="{{ $value->id }}"><i class="fa fa-eye"></i></button>
-                  <a href="{{ route('leadedit',$value->id) }}" class="btn btn-add btn-sm" edit_id="{{ $value->id }}"><i class="fa fa-pencil"></i></a>
+                    <button type="button" class="btn btn-info btn-sm view_lead" view_id="{{ $value->id }}"><i class="fa fa-eye"></i></button>
+                    @can('lead-edit')
+                    <a href="{{ route('leadedit',$value->id) }}" class="btn btn-add btn-sm" edit_id="{{ $value->id }}"><i class="fa fa-pencil"></i></a>
+                    @endcan
                </td>
             </tr>
             @endforeach
